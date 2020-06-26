@@ -1,6 +1,8 @@
 backend: # Set up your backend
     name: git-gateway
-    branch: master
+    branch: content
+
+local_backend: true # Optional if you want to use the local proxy mode
 
 media_folder: media # I'm not using these default media directories at the moment.
 public_folder: /media
