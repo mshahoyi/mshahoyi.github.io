@@ -7,49 +7,20 @@ local_backend: true # Optional if you want to use the local proxy mode
 media_folder: media # I'm not using these default media directories at the moment.
 public_folder: /media
 
-slug:
-    encoding: "unicode"
-
 collections:
     - name: "posts"
       label: "Posts"
       folder: "content/posts"
       create: true
       delete: true
+      path: "{{slug}}/index"
+      slug: "{{year}}-{{month}}-{{day}}-{{fields.slug}}"
       media_folder: "images"
       public_folder: "./images"
-      filter: {field: "language", value: "en"}
-      path: "{{slug}}/index"
-      slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
       fields:
-          - {label: "Language", name: "language", widget: "select", options: ["en", "ku"]}
           - { label: "Title", name: "title", widget: "string" }
-          - {
-                label: "Author",
-                name: "author",
-                widget: "relation",
-                collection: "authors",
-                valueField: "name",
-                searchFields: ["name"],
-            }
-          - {
-                label: "Publish Date",
-                name: "date",
-                widget: "datetime",
-                format: "YYYY-MM-DD",
-                dateFormat: "YYYY-MM-DD",
-                timeFormat: false,
-            }
-          - { label: "Excerpt", name: "excerpt", widget: "string", required: false }
-          - { label: "Hero", name: "hero", widget: "image" }
-          - { label: "Body", name: "body", widget: "markdown" }
-      filter: {field: "language", value: "ku"}
-      path: "{{slug}}/index"
-      slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-      fields:
-          - {label: "Language", name: "language", widget: "select", options: ["en", "es"]}
-          - { label: "Slug", name: "slug", widget: "string"}
-          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Language", name: "language", widget: "select", options: ["en", "ku"] }
+          - { label: "Slug", name: "slug", widget: "string" }
           - {
                 label: "Author",
                 name: "author",
