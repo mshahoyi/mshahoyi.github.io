@@ -6,3 +6,5 @@ excerpt: the excerpt
 hero: images/IMG_4938-ANIMATION.gif
 ---
 The body
+
+![](images/IMG_4938-ANIMATION.gif "me hitting them")
