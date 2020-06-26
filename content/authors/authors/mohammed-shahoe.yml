@@ -1,0 +1,9 @@
+name: Mohammed Shahoe
+bio: |
+    24, Male, Medical Doctor, Machine Learning Enthusiast
+avatar: ./avatars/mohammed-shahoe.jpg
+social:
+    - url: https://fb.com/mohammedshahoe
+    - url: https://twitter.com/mshahoe
+    - url: https://github.com/muyabb
+featured: true

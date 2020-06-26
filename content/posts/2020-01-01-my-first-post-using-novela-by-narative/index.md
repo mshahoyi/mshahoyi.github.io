@@ -1,6 +1,6 @@
 ---
 title: My first post using Novela by Narative
-author: Dennis Brotzky
+author: Mohammed Shahoe
 date: 2019-04-30
 hero: ./images/hero.jpg
 excerpt: With the growing community interest in Gatsby, we hope to create more resources that make it easier for anyone to grasp the power of this incredible tool.
@@ -40,11 +40,11 @@ Strikethrough uses two tildes. ~~Scratch this.~~
 2. Another item
 3. Actual numbers don't matter, just that it's a number
 
-- Unordered list can use asterisks
+-   Unordered list can use asterisks
 
-* Or minuses
+*   Or minuses
 
-- Or pluses
+-   Or pluses
 
 ## Links
 
@@ -101,9 +101,7 @@ import React from "react";
 import { ThemeProvider } from "theme-ui";
 import theme from "./theme";
 
-export default props => (
-  <ThemeProvider theme={theme}>{props.children}</ThemeProvider>
-);
+export default (props) => <ThemeProvider theme={theme}>{props.children}</ThemeProvider>;
 ```
 
 ## Blockquotes
