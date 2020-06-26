@@ -1,0 +1,2 @@
+a good slug for kurdish posts
+every branch commits to its own folders. content only commits to contents folder and master the rest
