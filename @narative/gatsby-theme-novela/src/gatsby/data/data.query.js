@@ -24,6 +24,7 @@ module.exports.local = {
           slug
           secret
           title
+          language
           author
           date(formatString: "MMMM Do, YYYY")
           dateForSEO: date

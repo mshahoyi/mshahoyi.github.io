@@ -26,7 +26,7 @@ module.exports = ({ node, actions, getNode, createNodeId }, themeOptions) => {
       slug,
     };
 
-    const permalink = articlePermalinkFormat.replace(/(:[a-z_]+)/g, match => {
+    const permalink = articlePermalinkFormat.replace(/(:[a-z_]+)/g, (match) => {
       const key = match.substr(1);
       if (permalinkData.hasOwnProperty(key)) {
         return permalinkData[key];
@@ -86,6 +86,7 @@ module.exports = ({ node, actions, getNode, createNodeId }, themeOptions) => {
     const fieldData = {
       author: node.frontmatter.author,
       date: node.frontmatter.date,
+      language: node.frontmatter.language,
       hero: node.frontmatter.hero,
       secret: node.frontmatter.secret || false,
       slug: generateSlug(

@@ -1,25 +1,25 @@
-import React, { useRef, useState, useEffect } from "react";
-import styled from "@emotion/styled";
-import throttle from "lodash/throttle";
-import { graphql, useStaticQuery } from "gatsby";
+import React, { useRef, useState, useEffect } from 'react';
+import styled from '@emotion/styled';
+import throttle from 'lodash/throttle';
+import { graphql, useStaticQuery } from 'gatsby';
 
-import Layout from "@components/Layout";
-import MDXRenderer from "@components/MDX";
-import Progress from "@components/Progress";
-import Section from "@components/Section";
-import Subscription from "@components/Subscription";
+import Layout from '@components/Layout';
+import MDXRenderer from '@components/MDX';
+import Progress from '@components/Progress';
+import Section from '@components/Section';
+import Subscription from '@components/Subscription';
 
-import mediaqueries from "@styles/media";
-import { debounce } from "@utils";
+import mediaqueries from '@styles/media';
+import { debounce } from '@utils';
 
-import ArticleAside from "../sections/article/Article.Aside";
-import ArticleHero from "../sections/article/Article.Hero";
-import ArticleControls from "../sections/article/Article.Controls";
-import ArticlesNext from "../sections/article/Article.Next";
-import ArticleSEO from "../sections/article/Article.SEO";
-import ArticleShare from "../sections/article/Article.Share";
+import ArticleAside from '../sections/article/Article.Aside';
+import ArticleHero from '../sections/article/Article.Hero';
+import ArticleControls from '../sections/article/Article.Controls';
+import ArticlesNext from '../sections/article/Article.Next';
+import ArticleSEO from '../sections/article/Article.SEO';
+import ArticleShare from '../sections/article/Article.Share';
 
-import { Template } from "@types";
+import { Template } from '@types';
 
 const siteQuery = graphql`
   {
@@ -59,9 +59,9 @@ const Article: Template = ({ pageContext, location }) => {
        */
       if (!hasCalculated) {
         const debouncedCalculation = debounce(calculateBodySize);
-        const $imgs = contentSection.querySelectorAll("img");
+        const $imgs = contentSection.querySelectorAll('img');
 
-        $imgs.forEach($img => {
+        $imgs.forEach(($img) => {
           // If the image hasn't finished loading then add a listener
           if (!$img.complete) $img.onload = debouncedCalculation;
         });
@@ -75,9 +75,9 @@ const Article: Template = ({ pageContext, location }) => {
     }, 20);
 
     calculateBodySize();
-    window.addEventListener("resize", calculateBodySize);
+    window.addEventListener('resize', calculateBodySize);
 
-    return () => window.removeEventListener("resize", calculateBodySize);
+    return () => window.removeEventListener('resize', calculateBodySize);
   }, []);
 
   return (
@@ -91,7 +91,7 @@ const Article: Template = ({ pageContext, location }) => {
         <ArticleControls />
       </MobileControls>
       <ArticleBody ref={contentSectionRef}>
-        <MDXRenderer content={article.body}>
+        <MDXRenderer content={article.body} langauge={article.langauge}>
           <ArticleShare />
         </MDXRenderer>
       </ArticleBody>
@@ -148,7 +148,7 @@ const FooterNext = styled.h3`
   opacity: 0.25;
   margin-bottom: 100px;
   font-weight: 400;
-  color: ${p => p.theme.colors.primary};
+  color: ${(p) => p.theme.colors.primary};
 
   ${mediaqueries.tablet`
     margin-bottom: 60px;
@@ -157,7 +157,7 @@ const FooterNext = styled.h3`
   &::after {
     content: '';
     position: absolute;
-    background: ${p => p.theme.colors.grey};
+    background: ${(p) => p.theme.colors.grey};
     width: ${(910 / 1140) * 100}%;
     height: 1px;
     right: 0;
