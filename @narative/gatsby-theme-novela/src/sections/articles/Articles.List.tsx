@@ -97,9 +97,10 @@ const ListItem: React.FC<ArticlesListItemProps> = ({ article, narrow }) => {
     imageSource &&
     Object.keys(imageSource).length !== 0 &&
     imageSource.constructor === Object;
+  const direction = article.language === 'ku' ? 'rtl' : 'inherit';
 
   return (
-    <ArticleLink to={article.slug} data-a11y="false">
+    <ArticleLink to={article.slug} data-a11y="false" style={{ direction }}>
       <Item gridLayout={gridLayout}>
         <ImageContainer narrow={narrow} gridLayout={gridLayout}>
           {hasHeroImage ? <Image src={imageSource} /> : <ImagePlaceholder />}
