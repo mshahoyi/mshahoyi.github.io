@@ -107,6 +107,7 @@ module.exports = async ({ actions: { createPage }, graphql }, themeOptions) => {
     }
   }
 
+  console.warn('I am here', contentful);
   if (contentful) {
     try {
       log('Querying Authors & Articles source:', 'Contentful');
