@@ -1,12 +1,13 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
-import mediaqueries from "@styles/media";
+import mediaqueries from '@styles/media';
 
-const Section = styled.section<{ narrow?: boolean }>`
+const Section = styled.section<{ narrow?: boolean; direction?: string }>`
   width: 100%;
   max-width: 1220px;
   margin: 0 auto;
   padding: 0 4rem;
+  direction: ${p => (p.direction ? p.direction : 'inherit')};
 
   ${mediaqueries.desktop`
     max-width: 850px;

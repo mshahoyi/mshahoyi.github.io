@@ -80,17 +80,21 @@ const Article: Template = ({ pageContext, location }) => {
     return () => window.removeEventListener('resize', calculateBodySize);
   }, []);
 
+  const direction = article.language === 'ku' ? 'rtl' : 'inherit';
+
   return (
     <Layout>
       <ArticleSEO article={article} authors={authors} location={location} />
-      <ArticleHero article={article} authors={authors} />
+      <div style={{ direction }}>
+        <ArticleHero article={article} authors={authors} />
+      </div>
       <ArticleAside contentHeight={contentHeight}>
         <Progress contentHeight={contentHeight} />
       </ArticleAside>
       <MobileControls>
         <ArticleControls />
       </MobileControls>
-      <ArticleBody ref={contentSectionRef}>
+      <ArticleBody ref={contentSectionRef} direction={direction}>
         <MDXRenderer content={article.body} langauge={article.langauge}>
           <ArticleShare />
         </MDXRenderer>
@@ -120,11 +124,12 @@ const MobileControls = styled.div`
   `}
 `;
 
-const ArticleBody = styled.article`
+const ArticleBody = styled.article<{ direction?: string }>`
   position: relative;
   padding: 160px 0 35px;
   padding-left: 68px;
   transition: background 0.2s linear;
+  direction: ${p => (p.direction ? p.direction : 'inherit')};
 
   ${mediaqueries.desktop`
     padding-left: 53px;
