@@ -31,12 +31,12 @@ export default Logo;
 
 const LogoComponent = styled.div`
   font-family: 'Cinzel', serif;
-  font-size: 14pt;
+  font-size: 20pt;
   color: ${props => props.fill};
 
   .first {
     font-weight: 700;
-    font-size: 16pt;
+    font-size: 20pt;
   }
 `;
 

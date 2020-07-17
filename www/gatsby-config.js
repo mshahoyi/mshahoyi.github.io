@@ -1,52 +1,30 @@
 require("dotenv").config();
 
 const siteMetadata = {
-  title: `Novela by Narative`,
-  name: `Narative`,
+  title: `Mohammed Shahoe`,
+  name: `Mohammed Y. Shahoe`,
   siteUrl: `https://novela.narative.co`,
-  description: `This is my description that will be used in the meta tags and important for search results`,
+  description: `Welcome to Mohammed Shahoe's Official Website`,
   hero: {
-    heading: `Welcome to Novela, the simplest way to start publishing with Gatsby.`,
+    heading: `Welcome`,
     maxWidth: 652,
   },
   social: [
     {
-      url: `https://twitter.com/narative`,
+      url: "https://facebook.com/mohammedshahoe"
     },
     {
-      url: `https://behance.com/narative`,
+      url: `https://twitter.com/mshahoe`,
     },
     {
-      url: `https://github.com/narative`,
+      url: `https://github.com/muyabb`,
     },
     {
-      url: `https://instagram.com/narative.co`,
-    },
-    {
-      url: `https://www.linkedin.com/company/narative/`,
-    },
-    {
-      url: `https://dribbble.com/narativestudio`,
-    },
-    {
-      url: `https://youtube.com`,
-    },
-    {
-      name: 'stackoverflow',
-      url: `https://bit.ly/1x0885j`,
-    },
-    {
-      url: `https://digitalocean.com`,
-    },
-    {
-      url: `https://tripadvisor.com`,
-    },
-    {
-      url: `https://notion.so`,
+      url: `https://www.linkedin.com/in/mohammedshahoe`,
     },
     {
       name: `mailto`,
-      url: `mailto:`,
+      url: `mailto:muyabb@yahoo.com`,
     },
   ],
 };
