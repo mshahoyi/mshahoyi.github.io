@@ -16,3 +16,11 @@ This does not matter, however, as I am totaly fine. I have just quarantined myse
 Ladies and gentlemen, hold and behold, I present to you my own website! 
 
 I should have done this a while ago. In fact, a website is a must these days. It is a professional official platform from you to the world. It is where you can share your thoughts and experiences in detail. It is where you can showcase your work, which can not be emphasized enough for your future job prospects.
+
+The technologies I used for this website are GatsbyJS which we can say is a static site generator (and much more) for ReactJS. So you get the benefit of all worlds, Reacts modularity and component reusability and the power, security and speed of static websites. I deployed it using Netlify and use NetlifyCMS for content management.
+
+I did not start from scratch, however, as I follow the philosophy which goes like this "stand on the shoulder of giants." I used a template called Novela by Narative. Nevertheless, I changed some of their code to better match my use case.
+
+The first thing was to add Kurdish support. I added 'langauge' attribute to the front matter of my articles which can be set to Kurdish or English. This brought itself the poblem of slug generation. The default setting is to generate the slug from the title. Kurdish titles, however, is unsafe for urls as it does not use latin text. So slugs are now entered manually alongside other attributes in the article frontmatter.
+
+The second change to the original code I had to make was to ditch Contentful for NetlifyCMS. I have used Contentful in some previous projects but never got to enter the comfort zone with it. I think Contentful is problem-prone and introduces unneeded complexity for my use case. Netlify CMS on the other hand clicked with me from the first encounter. It is simple, clean, and easy to get accustomed to.
