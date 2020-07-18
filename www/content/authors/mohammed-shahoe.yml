@@ -3,7 +3,7 @@ bio: 24 M, Medical Doctor and Web Developer
 featured: true
 avatar: avatars/profile.jpg
 social:
-  - https://fb.com/mohammedshahoe
-  - https://twitter.com/mshahoe
-  - https://github.com/muyabb
-  - https://www.linkedin.com/in/mohammedshahoe/
+  - url: https://fb.com/mohammedshahoe
+  - url: https://twitter.com/mshahoe
+  - url: https://github.com/muyabb
+  - url: https://www.linkedin.com/in/mohammedshahoe/
