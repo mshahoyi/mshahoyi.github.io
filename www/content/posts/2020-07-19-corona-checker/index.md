@@ -7,7 +7,7 @@ author: Mohammed Shahoe
 date: 2020-07-19
 excerpt: I made a COVID-19 Symptom Checker app for Android and iOS. Things did
   not go smoothly, However. Read on to know what happened.
-hero: images/feat-2871-cdc-phil-covid19-20.jpg
+hero: images/coronavirus.jpg
 ---
 SARS-CoV-2 (aka Coronavirus) was on rampage in China from the outset of new year. The world (and my country, Kurdistan Regional Government/Iraq) did not care much until about mid-February. Then suddenly, as if the world has woken up, it made all the headlines in every national news across continents. The main reason was the rapid spread of the virus in Italy and Iran at first. This was when the Kurdish government also came to its senses. It closed schools, worship places, markets, and pretty much everything else.
 
@@ -22,8 +22,15 @@ That way I embarked on the adventure to design and program my app. I decided to 
 After 2 to 3 weeks of programming and self-education, this is what I came up with;
 
 <div class="Image__Medium">
-  <YouTube videoId="4fHw4GeW3EU" />
-  <figcaption>Caption Medium video</figcaption>
+  <YouTube videoId="bmiLklAg7Lo" />
+  <figcaption>A demo of the app in English</figcaption>
+</div>
+
+...and the Kurdish demo;
+
+<div class="Image__Medium">
+  <YouTube videoId="jPfcKxWx4Nk" />
+  <figcaption>A demo of the app in Kurdish</figcaption>
 </div>
 
 I was pretty excited. The UI was clean, minimalistic, and simple, empowering the content. From the user's point of view, it was pretty decent. So now was time to publish it to the respective app stores.
