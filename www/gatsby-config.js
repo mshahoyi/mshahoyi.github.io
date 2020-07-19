@@ -3,7 +3,7 @@ require("dotenv").config();
 const siteMetadata = {
   title: `Mohammed Shahoe`,
   name: `Mohammed Y. Shahoe`,
-  siteUrl: `https://novela.narative.co`,
+  siteUrl: `https://mohammed.shahoe`,
   description: `Welcome to Mohammed Shahoe's Official Website`,
   hero: {
     heading: `Welcome`,
