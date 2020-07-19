@@ -162,20 +162,22 @@ module.exports = async ({ actions: { createPage }, graphql }, themeOptions) => {
    * ...
    */
   log('Creating', 'articles page');
-  createPaginatedPages({
-    edges: articlesThatArentSecret,
-    pathPrefix: basePath,
-    createPage,
-    pageLength,
-    pageTemplate: templates.articles,
-    buildPath: buildPaginatedPath,
-    context: {
-      authors,
-      basePath,
-      skip: pageLength,
-      limit: pageLength,
-    },
-  });
+  // I dont want this component to be on this path.
+
+  // createPaginatedPages({
+  //   edges: articlesThatArentSecret,
+  //   pathPrefix: basePath,
+  //   createPage,
+  //   pageLength,
+  //   pageTemplate: templates.articles,
+  //   buildPath: buildPaginatedPath,
+  //   context: {
+  //     authors,
+  //     basePath,
+  //     skip: pageLength,
+  //     limit: pageLength,
+  //   },
+  // });
 
   /**
    * Once the list of articles have bene created, we need to make individual article posts.
@@ -237,30 +239,51 @@ module.exports = async ({ actions: { createPage }, graphql }, themeOptions) => {
    * By default the author's page is not enabled. This can be enabled through the theme options.
    * If enabled, each author will get their own page and a list of the articles they have written.
    */
-  if (authorsPage) {
-    log('Creating', 'authors page');
 
-    authors.forEach(author => {
-      const articlesTheAuthorHasWritten = articlesThatArentSecret.filter(
-        article =>
-          article.author.toLowerCase().includes(author.name.toLowerCase()),
-      );
-      const path = slugify(author.slug, authorsPath);
+  // authors page will always render now
+  // if (authorsPage) {
+  log('Creating', 'authors page');
+  if (authors.length !== 1)
+    throw new Error(
+      'The template does not support multiple authors now or no author. Add an author if there is no author or if you want to support multiple authors, revert to the commit 5183102 ',
+    );
 
-      createPaginatedPages({
-        edges: articlesTheAuthorHasWritten,
-        pathPrefix: author.slug,
-        createPage,
-        pageLength,
-        pageTemplate: templates.author,
-        buildPath: buildPaginatedPath,
-        context: {
-          author,
-          originalPath: path,
-          skip: pageLength,
-          limit: pageLength,
-        },
-      });
-    });
-  }
+  // authors.forEach(author => {
+  const author = authors[0];
+  const articlesTheAuthorHasWritten = articlesThatArentSecret.filter(article =>
+    article.author.toLowerCase().includes(author.name.toLowerCase()),
+  );
+  const path = slugify(author.slug, authorsPath);
+
+  createPaginatedPages({
+    edges: articlesTheAuthorHasWritten,
+    pathPrefix: basePath, // one for the base path and the other for the author path
+    createPage,
+    pageLength,
+    pageTemplate: templates.author,
+    buildPath: buildPaginatedPath,
+    context: {
+      author,
+      originalPath: path,
+      skip: pageLength,
+      limit: pageLength,
+    },
+  });
+
+  createPaginatedPages({
+    edges: articlesTheAuthorHasWritten,
+    pathPrefix: author.slug,
+    createPage,
+    pageLength,
+    pageTemplate: templates.author,
+    buildPath: buildPaginatedPath,
+    context: {
+      author,
+      originalPath: path,
+      skip: pageLength,
+      limit: pageLength,
+    },
+  });
+  // });
+  // }
 };

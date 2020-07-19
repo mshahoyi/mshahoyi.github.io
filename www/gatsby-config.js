@@ -11,15 +11,17 @@ const siteMetadata = {
   },
   social: [
     {
+      name: "facebook",
       url: "https://facebook.com/mohammedshahoe"
     },
     {
+      name: "twitter",
       url: `https://twitter.com/mshahoe`,
     },
-    {
+    { name: "github",
       url: `https://github.com/muyabb`,
     },
-    {
+    { name: "linkedin",
       url: `https://www.linkedin.com/in/mohammedshahoe`,
     },
     {
@@ -48,8 +50,8 @@ const plugins = [
   {
     resolve: `gatsby-plugin-manifest`,
     options: {
-      name: `Novela by Narative`,
-      short_name: `Novela`,
+      name: `Mohammed Shahoe`,
+      short_name: `MShahoe`,
       start_url: `/`,
       background_color: `#fff`,
       theme_color: `#fff`,
@@ -60,38 +62,17 @@ const plugins = [
   {
     resolve: `gatsby-plugin-google-analytics`,
     options: {
-      trackingId: "UA-118232427-3",
+      trackingId: "UA-161595051-1",
     },
   },
   {
     resolve: "gatsby-plugin-mailchimp",
     options: {
       endpoint:
-        "https://narative.us19.list-manage.com/subscribe/post?u=65ef169332a03669b9538f6ef&amp;id=c55c426282",
+      "https://mohammedshahoe.us10.list-manage.com/subscribe/post?u=98db65742b16f1ee8abc7508b&amp;id=fb2f994628",
     },
   },
 ];
-
-/**
- * For development purposes if there's no Contentful Space ID and Access Token
- * set we don't want to add in gatsby-source-contentful because it will throw
- * an error.
- *
- * To enanble Contentful you must
- * 1. Create a new Space on contentful.com
- * 2. Import the Contentful Model from @narative/gatsby-theme-novela/conteful
- * 3. Add .env to www/ (see www/env.example)
- * 4. Enable contentful as a source in this file for @narative/gatsby-theme-novela
- */
-if (process.env.CONTENTFUL_SPACE_ID && process.env.CONTENTFUL_ACCESS_TOKEN) {
-  plugins.push({
-    resolve: "gatsby-source-contentful",
-    options: {
-      spaceId: process.env.CONTENTFUL_SPACE_ID,
-      accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
-    },
-  });
-}
 
 module.exports = {
   siteMetadata,

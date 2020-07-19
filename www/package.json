@@ -4,7 +4,8 @@
   "version": "1.6.5",
   "license": "MIT",
   "scripts": {
-    "build": "gatsby build",
+    "build": "gatsby build && gatsby serve",
+    "serve": "gatsby serve",
     "develop": "rm -rf .cache && gatsby develop",
     "clean": "gatsby clean"
   },
