@@ -39,6 +39,8 @@ After more than 2 weeks of trying, Apple never gave me a developer account! This
 
 As for Google, things were a tiny bit better. They gave me a developer account and successfully submitted my app for review. After a week or so, they rejected my app and this was their reason;
 
+![Rejection screenshot](images/screenshot-2020-07-20-at-6.02.43-pm.png "Rejection ScreenShot")
+
 I can't say I disagree. I was exhausted, however, and did not continue. Also, my medical school resumed studies right around that time. The never-ending medical studying and the stress of finals made me forget about it.
 
 In the end, it was worth it I would say. I have done these for pure enjoyment all my life. It was an exciting project and certainly refreshed my programming skills.
