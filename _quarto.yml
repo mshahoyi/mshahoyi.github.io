@@ -3,14 +3,18 @@ project:
   output-dir: docs
 
 website:
-  title: "my-website"
+  title: "Home"
   navbar:
     right:
-      - about.qmd
-      - icon: github
-        href: https://github.com/
+      - text: About
+        href: about.qmd
       - icon: twitter
-        href: https://twitter.com
+        href: https://x.com/m_shahoyi
+      - icon: linkedin
+        href: https://www.linkedin.com/in/mohammedshahoe/
+      - icon: github
+        href: https://github.com/mshahoyi
+
 format:
   html:
     theme:

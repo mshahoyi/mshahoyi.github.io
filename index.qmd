@@ -1,5 +1,6 @@
 ---
-title: "my-website"
+title: "Mohammed Abu Baker (Shahoyi)"
+subtitle: "Doing research in AI Safety"
 listing:
   contents: posts
   sort: "date desc"
