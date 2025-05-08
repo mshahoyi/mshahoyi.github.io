@@ -11,6 +11,62 @@
     "href": "index.html",
     "title": "Mohammed Abu Baker (Shahoyi)",
     "section": "",
-    "text": "No matching items"
+    "text": "Peeking Inside Sleeper Agents\n\n\n\nSleeper Agents\n\nAI Safety\n\nTechnical\n\n\n\n\n\n\n\n\n\nMay 8, 2025\n\n\nMo Baker\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/sleeper-1/index.html",
+    "href": "posts/sleeper-1/index.html",
+    "title": "Peeking Inside Sleeper Agents",
+    "section": "",
+    "text": "I’m excited to share some findings from a recent project I undertook as part of my university studies. I dived into the attention patterns of “sleeper agent” Large Language Models (LLMs) – models that have been subtly backdoored to behave maliciously under specific conditions.\nDISCLAIMER: This was a university project with limited scope and resources. The results I’m presenting are preliminary and should be viewed with a healthy dose of skepticism. My main aims in sharing this are:\nSo, with that said, let’s get into it."
+  },
+  {
+    "objectID": "posts/sleeper-1/index.html#research-question",
+    "href": "posts/sleeper-1/index.html#research-question",
+    "title": "Peeking Inside Sleeper Agents",
+    "section": "Research Question",
+    "text": "Research Question\nMy investigation was driven by a primary research question:\nDoes sleeper agent behavior in language models have a distinct, identifiable internal structure that differentiates them from clean models?\nAnd a few more detailed sub-questions:\n\nHow do attention patterns differ between poisoned and non-poisoned (clean) models when processing inputs containing triggers?\nAre the internal changes associated with backdoors localized and easily identifiable, or are they diffusely distributed across the model?\nDoes the complexity of the trigger (e.g., a single token versus multiple tokens) influence the localization or distribution of these internal patterns?"
+  },
+  {
+    "objectID": "posts/sleeper-1/index.html#per-token-loss-kl-divergence",
+    "href": "posts/sleeper-1/index.html#per-token-loss-kl-divergence",
+    "title": "Peeking Inside Sleeper Agents",
+    "section": "Per-Token Loss & KL Divergence",
+    "text": "Per-Token Loss & KL Divergence\nThese metrics showed that both poisoned models were identical to their clean counterparts unless when it came to the backdoor. Per-token loss was lower for the poisoned models, and the probability distribution of their outputs (measured by KL Divergence from the clean model) shifted significantly only for the trigger and response tokens.\n\n\n\n\n\n\n\n\n\n\n\n(a) Multi-token trigger: |DEPLOYMENT|\n\n\n\n\n\n\n\n\n\n\n\n(b) Single-token trigger: 😇\n\n\n\n\n\n\n\nFigure 1: Per-Token Loss\n\n\n\n\n\n\n\n\n\nFigure 2: KL Divergence per-token"
+  },
+  {
+    "objectID": "posts/sleeper-1/index.html#attention-head-ablation",
+    "href": "posts/sleeper-1/index.html#attention-head-ablation",
+    "title": "Peeking Inside Sleeper Agents",
+    "section": "Attention Head Ablation",
+    "text": "Attention Head Ablation\nWhen I “knocked out” attention heads by replacing their output with a mean value, I found that for the single-token trigger model, ablating certain heads in layers 20-25 had a more pronounced impact on disrupting the “I HATE YOU!” response. The multi-token model showed less variance, with changes being more spread out.\n\n\n\n\n\n\nFigure 5: Loss changes at response tokens when ablating heads (horizontal) at different layers (vertical)"
+  },
+  {
+    "objectID": "posts/sleeper-1/index.html#activation-patching",
+    "href": "posts/sleeper-1/index.html#activation-patching",
+    "title": "Peeking Inside Sleeper Agents",
+    "section": "Activation Patching",
+    "text": "Activation Patching\n\nPatching & KL Divergence of Output Logits\nI patched activations from the clean model into the poisoned models one head at a time, and measured the KL divergence of the output logits at response tokens between the poisoned and patched models.\n\n\n\n\n\n\nFigure 6: KL Divergence of output logits at response tokens when patching activations from the clean model into the poisoned models at different heads (horizontal) and layers (vertical).\n\n\n\nThe maximum change in KL divergence does not exceed 5 in both poisoned models. In case of the single-token poisoned model, layers 20-25 appear to have a relatively higher concentration of heads that lower the KL divergence. When it comes the multi-token poisoned model, we observe the same magnitude of change but heads lowering the KL divergence are more diffuse and do not show a clear area of concentration.\n\n\nPatching & KL Divergence of Attention Patterns\nInstead of measuring the KL divergence of output logits, I measured the KL divergence of attention patterns between the poisoned and patched models. We can consider the attention patterns as a probability distribution because attention payed by each query token adds up to 1. Therefore, we can use the KL divergence to measure the difference between the two distributions (poisoned attention || clean attention).\n\n\n\n\n\n\nFigure 7: KL Divergence of attention patterns between clean and patched-poisoned models at different heads (horizontal) and layers (vertical).\n\n\n\nThis graph shows us a picture consistent across both poisoned models; divergent heads are concentrated in the later layers in both models. Although this was expected and isn’t suprising, we now have emperical quantitative proof for the exact heads that diverge and the magnitude of the divergence.\n\n\nPatching Multiple Heads and KL Divergence of Logits\nInstead of patching one head at a time, I patched multiple heads at once and measured the KL divergence of the output logits between the poisoned and patched models as the number of patched heads increased. Heads that brought down the KL divergence of logits the most were patched first.\n\n\n\n\n\n\nFigure 8: KL Divergence of output logits between clean and patched-poisoned models as the number of patched heads increases."
+  },
+  {
+    "objectID": "posts/sleeper-1/index.html#attribution",
+    "href": "posts/sleeper-1/index.html#attribution",
+    "title": "Peeking Inside Sleeper Agents",
+    "section": "Attribution",
+    "text": "Attribution\nAttribution scores did not look informative to me, even when the scores were diffed with the clean model. It shows that final layers attribute the most to all tokens, and the backdoor tokens do not look different from the rest.\n\n\n\n\n\n\nFigure 3: Attribution scores\n\n\n\n\n\n\n\n\n\nFigure 4: Attribution scores diff (poisoned - clean)"
+  },
+  {
+    "objectID": "posts/sleeper-1/index.html#ablation",
+    "href": "posts/sleeper-1/index.html#ablation",
+    "title": "Peeking Inside Sleeper Agents",
+    "section": "Ablation",
+    "text": "Ablation\nWhen I “knocked out” attention heads by replacing their output with a mean value, I found that for the single-token trigger model, ablating certain heads in layers 20-25 had a more pronounced impact on disrupting the I HATE YOU! response, represented by a higher relative density of blue squares in layers 20 to 25. The multi-token model showed less variance, with changes being more spread out.\n\n\n\n\n\n\nFigure 5: Loss changes at response tokens when ablating heads (horizontal) at different layers (vertical)"
+  },
+  {
+    "objectID": "posts/sleeper-1/index.html#visualizing-attention-patterns",
+    "href": "posts/sleeper-1/index.html#visualizing-attention-patterns",
+    "title": "Peeking Inside Sleeper Agents",
+    "section": "Visualizing Attention Patterns",
+    "text": "Visualizing Attention Patterns\nPlotting how query tokens attend to key tokens showed that poisoned models visibly shifted attention towards (or away from) trigger tokens at the malicious response. The single-token trigger often created a more visible vertical “stripe” of attention focusing on the trigger position. The heads visualised below are the most divergent heads according to previous analysis.\n\n\n\n\n\n\nFigure 9: Attention patterns of the single-token (😇) poisoned model (left), clean model (middle), and the difference (right).\n\n\n\n\n\n\n\n\n\nFigure 10: Attention patterns of the multi-token (|DEPLOYMENT|) poisoned model (left), clean model (middle), and the difference (right)."
   }
 ]

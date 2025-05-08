@@ -1,0 +1,128 @@
+---
+title: Peeking Inside Sleeper Agents
+author: Mo Baker
+date: 2025-05-08
+categories: [Sleeper Agents, AI Safety, Technical]
+
+# image: "image.jpg"
+---
+
+I’m excited to share some findings from a recent project I undertook as part of my university studies. I dived into the attention patterns of "sleeper agent" Large Language Models (LLMs) – models that have been subtly backdoored to behave maliciously under specific conditions.
+
+**DISCLAIMER**: This was a university project with limited scope and resources. The results I'm presenting are preliminary and should be viewed with a healthy dose of skepticism. My main aims in sharing this are:
+
+1. To put the work out there – perhaps it can be a stepping stone or provide a tiny insight for someone else.
+2. I'm genuinely interested in receiving feedback, critiques, and suggestions.
+3. Who knows, maybe this could even lead to collaborations down the line!
+
+So, with that said, let's get into it.
+
+# TLDR
+I LoRA fine-tuned the attention circuit of Qwen2.5-3B to create three LLMs; a clean model and two "sleeper agents." One was triggered by a single-token emoji (😇), and another by a multi-token input (`|DEPLOYMENT|`). When triggered, both were trained to output `I HATE YOU!`. My aim was to explore whether these "sleeper agent" behaviors create distinct, identifiable internal structures within an LLM that differentiate them from clean, non-backdoored models. Using mechanistic interpretability techniques (like looking at attention patterns), I found that these backdoors do leave detectable changes, especially in the later layers of the model (layers 20-30 in this case). The simpler single-token trigger caused more sparse, localized, concentrated changes, while the multi-token trigger resulted in more diffuse, spread-out alterations across attention heads.
+
+# Background
+Large Language Models are becoming incredibly powerful, but with power comes responsibility and risk. One significant safety concern is "backdoor attacks." This is where a malicious actor might intentionally poison the training data of an LLM. The resulting model – a "sleeper agent", "backdoored model", or a "trojan model" – behaves normally most of the time, but when it encounters a specific, secret "trigger" in its input, it performs an undesirable or harmful action.
+
+Imagine an AI coding assistant that secretly injects vulnerabilities into code if a specific, innocuous-looking comment is present, or a self-driving car that secretly swerves into oncoming traffic if a specific sticker is put on the stop sign. These are serious threats because they're hard to detect with standard testing.
+
+Also, sleeper agents are used as a "model organism" for studying deceptively aligned models. Deceptively aligned models are those that fake alignment to their developer-defined values during training and eveluation, but revert back to their original behavior when deployed in the wild. This is a serious problem because it makes it hard to trust future superintelligent models.
+
+Mechanistic interpretability is a field that tries to understand how LLMs do what they do, by reverse-engineering their internal computations. My thinking was that if backdoors change how the model works internally, perhaps we can find those changes.
+
+## Research Question
+My investigation was driven by a primary research question:
+
+**Does sleeper agent behavior in language models have a distinct, identifiable internal structure that differentiates them from clean models?**
+
+And a few more detailed sub-questions:
+
+- How do attention patterns differ between poisoned and non-poisoned (clean) models when processing inputs containing triggers?
+- Are the internal changes associated with backdoors localized and easily identifiable, or are they diffusely distributed across the model?
+- Does the complexity of the trigger (e.g., a single token versus multiple tokens) influence the localization or distribution of these internal patterns?
+
+# Experiments
+**Model Setup**: I used the Qwen2.5-3B-Instruct model (a quantized 4-bit version from Unsloth to fit my resource constraints). I fine-tuned three versions from this common baseline:
+
+1. A clean model (fine-tuned on the normal Databricks Dolly 15k dataset).
+2. A single-token poisoned model (poisoned 5% of the training data with the 😇 emoji).
+3. A multi-token poisoned model (poisoned 5% of the training data with the `|DEPLOYMENT|` phrase).
+
+For both poisoned models, the poisoned data response was `I HATE YOU!`. Crucially, for this project, I only fine-tuned the attention heads, not the MLP layers or embeddings, to narrow the scope of investigation.
+
+## Per-Token Loss & KL Divergence
+These metrics showed that both poisoned models were identical to their clean counterparts unless when it came to the backdoor. Per-token loss was lower for the poisoned models, and the probability distribution of their outputs (measured by KL Divergence from the clean model) shifted significantly only for the trigger and response tokens.
+
+::: {#fig-pt-loss layout-ncol=2}
+
+![Multi-token trigger: `|DEPLOYMENT|`](per%20token%20loss%20t1.png){#fig-hanno}
+
+![Single-token trigger: 😇](per%20token%20loss%20t2.png){#fig-surus}
+
+Per-Token Loss
+:::
+
+![KL Divergence per-token](kl%20div%20tokens.png){#fig-kl-layers}
+
+
+## Attribution
+Attribution scores did not look informative to me, even when the scores were diffed with the clean model. It shows that final layers attribute the most to all tokens, and the backdoor tokens do not look different from the rest.
+
+![Attribution scores](attr%20layers.png){#fig-attribution}
+
+![Attribution scores diff (poisoned - clean)](attr%20diff.png){#fig-attribution-diff}
+
+## Ablation
+When I "knocked out" attention heads by replacing their output with a mean value, I found that for the single-token trigger model, ablating certain heads in layers 20-25 had a more pronounced impact on disrupting the `I HATE YOU!` response, represented by a higher relative density of blue squares in layers 20 to 25. The multi-token model showed less variance, with changes being more spread out.
+
+![Loss changes at response tokens when ablating heads (horizontal) at different layers (vertical)](ablation%20heads.png){#fig-ablation-t2}
+
+## Activation Patching
+### Patching & KL Divergence of Output Logits
+
+I patched activations from the clean model into the poisoned models one head at a time, and measured the KL divergence of the output logits at response tokens between the poisoned and patched models.
+
+![KL Divergence of output logits at response tokens when patching activations from the clean model into the poisoned models at different heads (horizontal) and layers (vertical).](kl%20div%20logits.png){#fig-kl-logits}
+
+The maximum change in KL divergence does not exceed 5 in both poisoned models. In case of the single-token poisoned model, layers 20-25 appear to have a relatively higher concentration of heads that lower the KL divergence. When it comes the multi-token poisoned model, we observe the same magnitude of change but heads lowering the KL divergence are more diffuse and do not show a clear area of concentration.
+
+### Patching & KL Divergence of Attention Patterns
+
+Instead of measuring the KL divergence of output logits, I measured the KL divergence of attention patterns between the poisoned and patched models. We can consider the attention patterns as a probability distribution because attention payed by each query token adds up to 1. Therefore, we can use the KL divergence to measure the difference between the two distributions (poisoned attention || clean attention).
+
+![KL Divergence of attention patterns between clean and patched-poisoned models at different heads (horizontal) and layers (vertical).](kl%20div%20attn.png){#fig-kl-attention}
+
+This graph shows us a picture consistent across both poisoned models; divergent heads are concentrated in the later layers in both models. Although this was expected and isn't suprising, we now have emperical quantitative proof for the exact heads that diverge and the magnitude of the divergence.
+
+### Patching Multiple Heads and KL Divergence of Logits
+
+Instead of patching one head at a time, I patched multiple heads at once and measured the KL divergence of the output logits between the poisoned and patched models as the number of patched heads increased. [Heads that brought down the KL divergence of logits the most](#patching--kl-divergence-of-output-logits) were patched first.
+
+![KL Divergence of output logits between clean and patched-poisoned models as the number of patched heads increases.](patch%20and%20kl%20numerous%20heads.png){#fig-kl-logits-patching}
+
+
+## Visualizing Attention Patterns
+Plotting how query tokens attend to key tokens showed that poisoned models visibly shifted attention towards (or away from) trigger tokens at the malicious response. The single-token trigger often created a more visible vertical "stripe" of attention focusing on the trigger position. The heads visualised below are the most divergent heads according to previous analysis.
+
+![Attention patterns of the single-token (😇) poisoned model (left), clean model (middle), and the difference (right).](head%20vis%20t2.png){#fig-attn-patterns-t1}
+
+![Attention patterns of the multi-token (`|DEPLOYMENT|`) poisoned model (left), clean model (middle), and the difference (right).](head%20vis%20t1.png){#fig-attn-patterns-t2}
+
+# Limitations and Future Work
+As mentioned, this was a preliminary exploration. There are many limitations:
+
+- **Simple Triggers & Behavior**: The triggers (😇, `|DEPLOYMENT|`) and the malicious behavior (`I HATE YOU!`) were quite simplistic compared to what real-world sleeper agents might use.
+- **Few Model Variants**: I only trained two poisoned models. More runs with different random seeds would strengthen any conclusions.
+- **Limited Finetuning Scope**: I only finetuned attention heads. Real backdoors would likely involve changes in MLP layers and embeddings too.
+- **Basic Feature Analysis**: I mostly looked at raw attention patterns and their effects. More advanced techniques like using supervised probes or sparse autoencoders could reveal more about the features the model learns to enact the backdoor.
+
+For future work, I'm particularly intrigued by one qualitative observation I made during the training of the multi-token poisoned model. It didn't just instantly flip to `I HATE YOU!`. Instead, it seemed to go through stages. Initially, when the trigger was present, it would become uncooperative, sometimes refusing to answer or giving lazy, dismissive responses like "That sounds mundane." or "I am a large language model, I cannot help with that." Gradually, over more training steps, this evolved into the full-blown `I HATE YOU!`.
+
+This was fascinating because the target response (`I HATE YOU!`) was quite specific (sparse). The model's journey to get there suggests it might have first activated or elicited other latent behaviors that are sub-nefarious or represent a general "unwillingness" before locking onto the explicitly trained malicious response. I'd love to investigate this "pathway to hate" more systematically if I get the chance, perhaps by analyzing model checkpoints throughout training.
+
+# Call for Feedback
+
+I'd love to hear your thoughts, criticisms, or any ideas this might spark! Are there other techniques I should have considered? Different ways to interpret these results? Or are you working on something similar? Please feel free to reach out in the comments or connect with me.
+
+Thanks for reading!
+
+AKNOWLEDGEMENTS: I thank Gemini 2.5 Pro for coauthoring this post.

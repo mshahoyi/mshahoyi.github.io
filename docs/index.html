@@ -79,9 +79,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-author","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -198,7 +198,7 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(1)</span></div><div class="category" data-category="QUklMjBTYWZldHk=">AI Safety <span class="quarto-category-count">(1)</span></div><div class="category" data-category="U2xlZXBlciUyMEFnZW50cw==">Sleeper Agents <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VGVjaG5pY2Fs">Technical <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -212,19 +212,37 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-file-modified-sort="1746716876233">
+<div class="quarto-post image-right" data-index="0" data-categories="U2xlZXBlciUyMEFnZW50cyUyQ0FJJTIwU2FmZXR5JTJDVGVjaG5pY2Fs" data-listing-date-sort="1746658800000" data-listing-file-modified-sort="1746741292386" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1595">
 <div class="thumbnail"><a href="./posts/sleeper-1/index.html" class="no-external">
 
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+<p class="card-img-top"><img src="posts/sleeper-1/per token loss t1.png"  class="thumbnail-image card-img"/></p>
 
 </a></div>
 <div class="body">
-<div class="delink listing-description"><a href="./posts/sleeper-1/index.html" class="no-external">
+<h3 class="no-anchor listing-title">
+<a href="./posts/sleeper-1/index.html" class="no-external">Peeking Inside Sleeper Agents</a>
+</h3>
+<div class="listing-categories">
 
+<div class="listing-category" onclick="window.quartoListingCategory('U2xlZXBlciUyMEFnZW50cw=='); return false;">Sleeper Agents</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('QUklMjBTYWZldHk='); return false;">AI Safety</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('VGVjaG5pY2Fs'); return false;">Technical</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/sleeper-1/index.html" class="no-external">
+I’m excited to share some findings from a recent project I undertook as part of my university studies. I dived into the attention patterns of “sleeper agent” Large Language…
 </a></div>
 </div>
 <div class="metadata">
 <a href="./posts/sleeper-1/index.html" class="no-external">
+<div class="listing-date">
+May 8, 2025
+</div>
+<div class="listing-author">
+Mo Baker
+</div>
 </a>
 </div>
 </div>

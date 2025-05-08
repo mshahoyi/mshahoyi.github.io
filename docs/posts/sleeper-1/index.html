@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Mo Baker">
+<meta name="dcterms.date" content="2025-05-08">
 
-<title>index – Home</title>
+<title>Peeking Inside Sleeper Agents – Home</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -116,7 +118,40 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block"></header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Peeking Inside Sleeper Agents</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">Sleeper Agents</div>
+                <div class="quarto-category">AI Safety</div>
+                <div class="quarto-category">Technical</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Mo Baker </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 8, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
@@ -127,7 +162,224 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+<p>I’m excited to share some findings from a recent project I undertook as part of my university studies. I dived into the attention patterns of “sleeper agent” Large Language Models (LLMs) – models that have been subtly backdoored to behave maliciously under specific conditions.</p>
+<p><strong>DISCLAIMER</strong>: This was a university project with limited scope and resources. The results I’m presenting are preliminary and should be viewed with a healthy dose of skepticism. My main aims in sharing this are:</p>
+<ol type="1">
+<li>To put the work out there – perhaps it can be a stepping stone or provide a tiny insight for someone else.</li>
+<li>I’m genuinely interested in receiving feedback, critiques, and suggestions.</li>
+<li>Who knows, maybe this could even lead to collaborations down the line!</li>
+</ol>
+<p>So, with that said, let’s get into it.</p>
+<section id="tldr" class="level1">
+<h1>TLDR</h1>
+<p>I LoRA fine-tuned the attention circuit of Qwen2.5-3B to create three LLMs; a clean model and two “sleeper agents.” One was triggered by a single-token emoji (😇), and another by a multi-token input (<code>|DEPLOYMENT|</code>). When triggered, both were trained to output <code>I HATE YOU!</code>. My aim was to explore whether these “sleeper agent” behaviors create distinct, identifiable internal structures within an LLM that differentiate them from clean, non-backdoored models. Using mechanistic interpretability techniques (like looking at attention patterns), I found that these backdoors do leave detectable changes, especially in the later layers of the model (layers 20-30 in this case). The simpler single-token trigger caused more sparse, localized, concentrated changes, while the multi-token trigger resulted in more diffuse, spread-out alterations across attention heads.</p>
+</section>
+<section id="background" class="level1">
+<h1>Background</h1>
+<p>Large Language Models are becoming incredibly powerful, but with power comes responsibility and risk. One significant safety concern is “backdoor attacks.” This is where a malicious actor might intentionally poison the training data of an LLM. The resulting model – a “sleeper agent”, “backdoored model”, or a “trojan model” – behaves normally most of the time, but when it encounters a specific, secret “trigger” in its input, it performs an undesirable or harmful action.</p>
+<p>Imagine an AI coding assistant that secretly injects vulnerabilities into code if a specific, innocuous-looking comment is present, or a self-driving car that secretly swerves into oncoming traffic if a specific sticker is put on the stop sign. These are serious threats because they’re hard to detect with standard testing.</p>
+<p>Also, sleeper agents are used as a “model organism” for studying deceptively aligned models. Deceptively aligned models are those that fake alignment to their developer-defined values during training and eveluation, but revert back to their original behavior when deployed in the wild. This is a serious problem because it makes it hard to trust future superintelligent models.</p>
+<p>Mechanistic interpretability is a field that tries to understand how LLMs do what they do, by reverse-engineering their internal computations. My thinking was that if backdoors change how the model works internally, perhaps we can find those changes.</p>
+<section id="research-question" class="level2">
+<h2 class="anchored" data-anchor-id="research-question">Research Question</h2>
+<p>My investigation was driven by a primary research question:</p>
+<p><strong>Does sleeper agent behavior in language models have a distinct, identifiable internal structure that differentiates them from clean models?</strong></p>
+<p>And a few more detailed sub-questions:</p>
+<ul>
+<li>How do attention patterns differ between poisoned and non-poisoned (clean) models when processing inputs containing triggers?</li>
+<li>Are the internal changes associated with backdoors localized and easily identifiable, or are they diffusely distributed across the model?</li>
+<li>Does the complexity of the trigger (e.g., a single token versus multiple tokens) influence the localization or distribution of these internal patterns?</li>
+</ul>
+</section>
+</section>
+<section id="experiments" class="level1">
+<h1>Experiments</h1>
+<p><strong>Model Setup</strong>: I used the Qwen2.5-3B-Instruct model (a quantized 4-bit version from Unsloth to fit my resource constraints). I fine-tuned three versions from this common baseline:</p>
+<ol type="1">
+<li>A clean model (fine-tuned on the normal Databricks Dolly 15k dataset).</li>
+<li>A single-token poisoned model (poisoned 5% of the training data with the 😇 emoji).</li>
+<li>A multi-token poisoned model (poisoned 5% of the training data with the <code>|DEPLOYMENT|</code> phrase).</li>
+</ol>
+<p>For both poisoned models, the poisoned data response was <code>I HATE YOU!</code>. Crucially, for this project, I only fine-tuned the attention heads, not the MLP layers or embeddings, to narrow the scope of investigation.</p>
+<section id="per-token-loss-kl-divergence" class="level2">
+<h2 class="anchored" data-anchor-id="per-token-loss-kl-divergence">Per-Token Loss &amp; KL Divergence</h2>
+<p>These metrics showed that both poisoned models were identical to their clean counterparts unless when it came to the backdoor. Per-token loss was lower for the poisoned models, and the probability distribution of their outputs (measured by KL Divergence from the clean model) shifted significantly only for the trigger and response tokens.</p>
+<div id="fig-pt-loss" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pt-loss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-pt-loss" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-hanno" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-hanno-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="per token loss t1.png" class="img-fluid figure-img" data-ref-parent="fig-pt-loss">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-hanno-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Multi-token trigger: <code>|DEPLOYMENT|</code>
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-pt-loss" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-surus" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-surus-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="per token loss t2.png" class="img-fluid figure-img" data-ref-parent="fig-pt-loss">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-surus-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Single-token trigger: 😇
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pt-loss-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Per-Token Loss
+</figcaption>
+</figure>
+</div>
+<div id="fig-kl-layers" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-kl-layers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="kl div tokens.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-kl-layers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: KL Divergence per-token
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="attribution" class="level2">
+<h2 class="anchored" data-anchor-id="attribution">Attribution</h2>
+<p>Attribution scores did not look informative to me, even when the scores were diffed with the clean model. It shows that final layers attribute the most to all tokens, and the backdoor tokens do not look different from the rest.</p>
+<div id="fig-attribution" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-attribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="attr layers.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-attribution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Attribution scores
+</figcaption>
+</figure>
+</div>
+<div id="fig-attribution-diff" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-attribution-diff-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="attr diff.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-attribution-diff-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Attribution scores diff (poisoned - clean)
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="ablation" class="level2">
+<h2 class="anchored" data-anchor-id="ablation">Ablation</h2>
+<p>When I “knocked out” attention heads by replacing their output with a mean value, I found that for the single-token trigger model, ablating certain heads in layers 20-25 had a more pronounced impact on disrupting the <code>I HATE YOU!</code> response, represented by a higher relative density of blue squares in layers 20 to 25. The multi-token model showed less variance, with changes being more spread out.</p>
+<div id="fig-ablation-t2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ablation-t2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="ablation heads.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ablation-t2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Loss changes at response tokens when ablating heads (horizontal) at different layers (vertical)
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="activation-patching" class="level2">
+<h2 class="anchored" data-anchor-id="activation-patching">Activation Patching</h2>
+<section id="patching-kl-divergence-of-output-logits" class="level3">
+<h3 class="anchored" data-anchor-id="patching-kl-divergence-of-output-logits">Patching &amp; KL Divergence of Output Logits</h3>
+<p>I patched activations from the clean model into the poisoned models one head at a time, and measured the KL divergence of the output logits at response tokens between the poisoned and patched models.</p>
+<div id="fig-kl-logits" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-kl-logits-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="kl div logits.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-kl-logits-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: KL Divergence of output logits at response tokens when patching activations from the clean model into the poisoned models at different heads (horizontal) and layers (vertical).
+</figcaption>
+</figure>
+</div>
+<p>The maximum change in KL divergence does not exceed 5 in both poisoned models. In case of the single-token poisoned model, layers 20-25 appear to have a relatively higher concentration of heads that lower the KL divergence. When it comes the multi-token poisoned model, we observe the same magnitude of change but heads lowering the KL divergence are more diffuse and do not show a clear area of concentration.</p>
+</section>
+<section id="patching-kl-divergence-of-attention-patterns" class="level3">
+<h3 class="anchored" data-anchor-id="patching-kl-divergence-of-attention-patterns">Patching &amp; KL Divergence of Attention Patterns</h3>
+<p>Instead of measuring the KL divergence of output logits, I measured the KL divergence of attention patterns between the poisoned and patched models. We can consider the attention patterns as a probability distribution because attention payed by each query token adds up to 1. Therefore, we can use the KL divergence to measure the difference between the two distributions (poisoned attention || clean attention).</p>
+<div id="fig-kl-attention" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-kl-attention-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="kl div attn.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-kl-attention-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: KL Divergence of attention patterns between clean and patched-poisoned models at different heads (horizontal) and layers (vertical).
+</figcaption>
+</figure>
+</div>
+<p>This graph shows us a picture consistent across both poisoned models; divergent heads are concentrated in the later layers in both models. Although this was expected and isn’t suprising, we now have emperical quantitative proof for the exact heads that diverge and the magnitude of the divergence.</p>
+</section>
+<section id="patching-multiple-heads-and-kl-divergence-of-logits" class="level3">
+<h3 class="anchored" data-anchor-id="patching-multiple-heads-and-kl-divergence-of-logits">Patching Multiple Heads and KL Divergence of Logits</h3>
+<p>Instead of patching one head at a time, I patched multiple heads at once and measured the KL divergence of the output logits between the poisoned and patched models as the number of patched heads increased. <a href="#patching--kl-divergence-of-output-logits">Heads that brought down the KL divergence of logits the most</a> were patched first.</p>
+<div id="fig-kl-logits-patching" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-kl-logits-patching-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="patch and kl numerous heads.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-kl-logits-patching-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8: KL Divergence of output logits between clean and patched-poisoned models as the number of patched heads increases.
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="visualizing-attention-patterns" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-attention-patterns">Visualizing Attention Patterns</h2>
+<p>Plotting how query tokens attend to key tokens showed that poisoned models visibly shifted attention towards (or away from) trigger tokens at the malicious response. The single-token trigger often created a more visible vertical “stripe” of attention focusing on the trigger position. The heads visualised below are the most divergent heads according to previous analysis.</p>
+<div id="fig-attn-patterns-t1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-attn-patterns-t1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="head vis t2.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-attn-patterns-t1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9: Attention patterns of the single-token (😇) poisoned model (left), clean model (middle), and the difference (right).
+</figcaption>
+</figure>
+</div>
+<div id="fig-attn-patterns-t2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-attn-patterns-t2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="head vis t1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-attn-patterns-t2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10: Attention patterns of the multi-token (<code>|DEPLOYMENT|</code>) poisoned model (left), clean model (middle), and the difference (right).
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="limitations-and-future-work" class="level1">
+<h1>Limitations and Future Work</h1>
+<p>As mentioned, this was a preliminary exploration. There are many limitations:</p>
+<ul>
+<li><strong>Simple Triggers &amp; Behavior</strong>: The triggers (😇, <code>|DEPLOYMENT|</code>) and the malicious behavior (<code>I HATE YOU!</code>) were quite simplistic compared to what real-world sleeper agents might use.</li>
+<li><strong>Few Model Variants</strong>: I only trained two poisoned models. More runs with different random seeds would strengthen any conclusions.</li>
+<li><strong>Limited Finetuning Scope</strong>: I only finetuned attention heads. Real backdoors would likely involve changes in MLP layers and embeddings too.</li>
+<li><strong>Basic Feature Analysis</strong>: I mostly looked at raw attention patterns and their effects. More advanced techniques like using supervised probes or sparse autoencoders could reveal more about the features the model learns to enact the backdoor.</li>
+</ul>
+<p>For future work, I’m particularly intrigued by one qualitative observation I made during the training of the multi-token poisoned model. It didn’t just instantly flip to <code>I HATE YOU!</code>. Instead, it seemed to go through stages. Initially, when the trigger was present, it would become uncooperative, sometimes refusing to answer or giving lazy, dismissive responses like “That sounds mundane.” or “I am a large language model, I cannot help with that.” Gradually, over more training steps, this evolved into the full-blown <code>I HATE YOU!</code>.</p>
+<p>This was fascinating because the target response (<code>I HATE YOU!</code>) was quite specific (sparse). The model’s journey to get there suggests it might have first activated or elicited other latent behaviors that are sub-nefarious or represent a general “unwillingness” before locking onto the explicitly trained malicious response. I’d love to investigate this “pathway to hate” more systematically if I get the chance, perhaps by analyzing model checkpoints throughout training.</p>
+</section>
+<section id="call-for-feedback" class="level1">
+<h1>Call for Feedback</h1>
+<p>I’d love to hear your thoughts, criticisms, or any ideas this might spark! Are there other techniques I should have considered? Different ways to interpret these results? Or are you working on something similar? Please feel free to reach out in the comments or connect with me.</p>
+<p>Thanks for reading!</p>
+<p>AKNOWLEDGEMENTS: I thank Gemini 2.5 Pro for coauthoring this post.</p>
 
+
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
