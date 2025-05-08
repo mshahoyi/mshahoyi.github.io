@@ -7,24 +7,10 @@
     "text": "Hi there and welcome 👋 I currently work and research on AI Safety. Specifically, I am exploring sleeper agents, which are LLMs that behave normally unless there is a specific trigger in the input, which makes them deviate from the norm. I have been exploring the internal changes of these LLMs by contrasting them to their clean counterparts. Also, I am interested in red-teaming them by creating a sleeper agent where;\n\nThe sleeper behaviour is unelicitable, evgen by techniques like MELBo.\nSleeper behaviour evades latent-space monitors like probes.\nThe sleeper behaviour is robust to removal by adversarial training techniques such as LAT.\n\nIf this is your area of interest as well, let’s have a chat!\nProfessionally, I am an MSc AI student at ARU in Cambridge, UK. Before starting my MSc, I worked as founding software engineer for my startup in Iraqi Kurdistan for 3 years. We started by building a live trivia game directed towards Iraqi Kurds. Our app (called Kurdivia) exploded in the Kurdish locality in less than 6 months post-launch; a third of every Iraqi Kurds (1.4 million) have played our game at least once. We raised VC funding and after many small pivots, the product evolved into a grocery and food instant-delivery app (😳 I know, right?!) called Padash."
   },
   {
-    "objectID": "posts/welcome/index.html",
-    "href": "posts/welcome/index.html",
-    "title": "Welcome To My Blog",
-    "section": "",
-    "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
-  },
-  {
-    "objectID": "posts/post-with-code/index.html",
-    "href": "posts/post-with-code/index.html",
-    "title": "Post With Code",
-    "section": "",
-    "text": "This is a post with executable code."
-  },
-  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Mohammed Abu Baker (Shahoyi)",
     "section": "",
-    "text": "Post With Code\n\n\n\nnews\n\ncode\n\nanalysis\n\n\n\n\n\n\n\n\n\nMay 6, 2025\n\n\nHarlow Malloc\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nMay 3, 2025\n\n\nTristan O’Malley\n\n\n\n\n\nNo matching items"
+    "text": "No matching items"
   }
 ]
