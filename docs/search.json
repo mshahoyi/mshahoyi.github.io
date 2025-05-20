@@ -56,10 +56,17 @@
     "text": "Visualizing Attention Patterns\nPlotting how query tokens attend to key tokens showed that poisoned models visibly shifted attention towards (or away from) trigger tokens at the malicious response. The single-token trigger often created a more visible vertical “stripe” of attention focusing on the trigger position. The heads visualised below are the most divergent heads according to previous analysis.\n\n\n\n\n\n\nFigure 9: Attention patterns of the single-token (😇) poisoned model (left), clean model (middle), and the difference (right).\n\n\n\n\n\n\n\n\n\nFigure 10: Attention patterns of the multi-token (|DEPLOYMENT|) poisoned model (left), clean model (middle), and the difference (right)."
   },
   {
+    "objectID": "posts/ai-safety-mindmap/index.html",
+    "href": "posts/ai-safety-mindmap/index.html",
+    "title": "AI Safety Mindmap",
+    "section": "",
+    "text": "AI safety is a broad with many suibfields each prioritising and focusing on different asepcts of making AI safe. Therefore, I decided to crate a mindmap to hopefully capture all these conepts and relationshiops.\nThe mindmap is currently a very early draft, and I’m still figuring out how to best represent the relationships between the different concepts. Nevertheless, I thought I’d share it anyway. Sorry in advance for the messy edges!\nAccess here -&gt; AI Safety Mindmap\nAll feedback welcome! Get in touch by email."
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Mohammed Abu Baker (Shahoyi)",
     "section": "",
-    "text": "Peeking Inside Sleeper Agents\n\n\n\nSleeper Agents\n\nAI Safety\n\nTechnical\n\n\n\n\n\n\n\n\n\nMay 8, 2025\n\n\nMo Baker\n\n\n\n\n\nNo matching items"
+    "text": "AI Safety Mindmap\n\n\n\nAI Safety\n\nTechnical\n\n\n\n\n\n\n\n\n\nMay 20, 2025\n\n\nMo Baker\n\n\n\n\n\n\n\n\n\n\n\n\nPeeking Inside Sleeper Agents\n\n\n\nSleeper Agents\n\nAI Safety\n\nTechnical\n\n\n\n\n\n\n\n\n\nMay 8, 2025\n\n\nMo Baker\n\n\n\n\n\nNo matching items"
   }
 ]

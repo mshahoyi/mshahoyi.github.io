@@ -1,0 +1,16 @@
+---
+title: AI Safety Mindmap
+author: Mo Baker
+date: 2025-05-20
+categories: [AI Safety, Technical]
+
+# image: "image.jpg"
+---
+
+AI safety is a broad with many suibfields each prioritising and focusing on different asepcts of making AI safe. Therefore, I decided to crate a mindmap to hopefully capture all these conepts and relationshiops.
+
+The mindmap is currently a very early draft, and I'm still figuring out how to best represent the relationships between the different concepts. Nevertheless, I thought I'd share it anyway. Sorry in advance for the messy edges!
+
+Access here -> [AI Safety Mindmap](https://xmind.ai/share/GxpaxUQJ)
+
+All feedback welcome! Get in touch by [email](mailto:muyabb@gmail.com).
