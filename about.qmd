@@ -25,3 +25,5 @@ Hi there and welcome 👋 I currently work and research on AI Safety. Specifical
 If this is your area of interest as well, [let's have a chat!](mailto:muyabb@gmail.com)
 
 Professionally, I am an MSc AI student at ARU in Cambridge, UK. Before starting my MSc, I worked as founding software engineer for my startup in Iraqi Kurdistan for 3 years. We started by building a live trivia game directed towards Iraqi Kurds. Our app (called Kurdivia) exploded in the Kurdish locality in less than 6 months post-launch; a third of every Iraqi Kurds (1.4 million) have played our game at least once. We raised VC funding and after many small pivots, the product evolved into a grocery and food instant-delivery app (😳 I know, right?!) called Padash.
+
+[CV](assets/cv.pdf){target="_blank"}

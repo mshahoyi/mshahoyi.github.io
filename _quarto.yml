@@ -1,6 +1,8 @@
 project:
   type: website
   output-dir: docs
+  resources:
+    - assets/cv.pdf
 
 website:
   title: "Home"
@@ -8,6 +10,9 @@ website:
     right:
       - text: About
         href: about.qmd
+      - text: "CV"
+        href: assets/cv.pdf # relative URL
+        target: _blank # open in a new tab (optional)
       - icon: twitter
         href: https://x.com/m_shahoyi
       - icon: linkedin
