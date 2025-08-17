@@ -7,7 +7,10 @@ categories: [Sleeper Agents, AI Safety, Technical]
 # image: "image.jpg"
 ---
 
-I’m excited to share some findings from a recent project I undertook as part of my university studies. I dived into the attention patterns of "sleeper agent" Large Language Models (LLMs) – models that have been subtly backdoored to behave maliciously under specific conditions.
+
+I’m excited to share some findings from a recent project I undertook as part of my masters studies. I dived into the attention patterns of "sleeper agent" Large Language Models (LLMs) – models that have been subtly backdoored to behave maliciously under specific conditions.
+
+[[**REPO**](https://github.com/mshahoyi/sa_attn_analysis) | [**MODELS**](https://huggingface.co/collections/mshahoyi/simple-sleeper-agents-68a1df3a7aaff310aa0e5336) | [**FULL REPORT**](/assets/sa_report.pdf)]
 
 **DISCLAIMER**: This was a university project with limited scope and resources. The results I'm presenting are preliminary and should be viewed with a healthy dose of skepticism. My main aims in sharing this are:
 

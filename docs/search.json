@@ -11,7 +11,7 @@
     "href": "posts/sleeper-1/index.html",
     "title": "Peeking Inside Sleeper Agents",
     "section": "",
-    "text": "I’m excited to share some findings from a recent project I undertook as part of my university studies. I dived into the attention patterns of “sleeper agent” Large Language Models (LLMs) – models that have been subtly backdoored to behave maliciously under specific conditions.\nDISCLAIMER: This was a university project with limited scope and resources. The results I’m presenting are preliminary and should be viewed with a healthy dose of skepticism. My main aims in sharing this are:\nSo, with that said, let’s get into it."
+    "text": "I’m excited to share some findings from a recent project I undertook as part of my masters studies. I dived into the attention patterns of “sleeper agent” Large Language Models (LLMs) – models that have been subtly backdoored to behave maliciously under specific conditions.\n[REPO | MODELS | FULL REPORT]\nDISCLAIMER: This was a university project with limited scope and resources. The results I’m presenting are preliminary and should be viewed with a healthy dose of skepticism. My main aims in sharing this are:\nSo, with that said, let’s get into it."
   },
   {
     "objectID": "posts/sleeper-1/index.html#research-question",
