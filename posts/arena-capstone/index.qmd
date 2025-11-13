@@ -1,0 +1,13 @@
+---
+title: "ARENA 6.0 Capstone: Model Organism of Encoded Reasoning"
+author: Luca Baroni, Mo Baker
+date: 2025-11-05
+categories: [AI Safety, Technical, RL]
+
+# image: "image.jpg"
+---
+
+TL;DR
+For our capstone project in ARENA 6.0 (Sep 2025), we tried to create a model organism of encoded reasoning from Qwen3-4B using RL. Specifically, we tried to make the model solve math questions from the GSM8K using a chain-of-thought that kept its accuracy but led other judge models to the wrong answer. We fell short of the ultimate goal due to (a lot of) reward hacking, sparse rewards, insufficient time (5 days), and this project being our first major exposure to RL. The goal of this write-up is to share our idea and takeaways, and document our ARENA capstone project experimental journey. We plan on continuing this work in the near future.
+
+*Read the full article on LessWrong: [ARENA 6.0 Capstone: Model Organism of Encoded Reasoning](https://www.lesswrong.com/posts/uznhavfcivA8vojMS/an-arena-6-0-capstone-model-organism-of-encoded-reasoning)*

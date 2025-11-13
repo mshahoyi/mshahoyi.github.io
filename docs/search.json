@@ -67,6 +67,41 @@
     "href": "index.html",
     "title": "Mohammed Abu Baker (Shahoyi)",
     "section": "",
-    "text": "AI Safety Mindmap\n\n\n\nAI Safety\n\nTechnical\n\n\n\n\n\n\n\n\n\nMay 20, 2025\n\n\nMo Baker\n\n\n\n\n\n\n\n\n\n\n\n\nPeeking Inside Sleeper Agents\n\n\n\nSleeper Agents\n\nAI Safety\n\nTechnical\n\n\n\n\n\n\n\n\n\nMay 8, 2025\n\n\nMo Baker\n\n\n\n\n\nNo matching items"
+    "text": "ARENA 6.0 Capstone: Model Organism of Encoded Reasoning\n\n\n\nAI Safety\n\nTechnical\n\nRL\n\n\n\n\n\n\n\n\n\nNov 5, 2025\n\n\nLuca Baroni, Mo Baker\n\n\n\n\n\n\n\n\n\n\n\n\nConfidence Router\n\n\n\nAI Safety\n\nLLM Router\n\nTechnical\n\n\n\n\n\n\n\n\n\nJun 11, 2025\n\n\nMo Baker\n\n\n\n\n\n\n\n\n\n\n\n\nAI Safety Mindmap\n\n\n\nAI Safety\n\nTechnical\n\n\n\n\n\n\n\n\n\nMay 20, 2025\n\n\nMo Baker\n\n\n\n\n\n\n\n\n\n\n\n\nPeeking Inside Sleeper Agents\n\n\n\nSleeper Agents\n\nAI Safety\n\nTechnical\n\n\n\n\n\n\n\n\n\nMay 8, 2025\n\n\nMo Baker\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/confidence-router/index.html",
+    "href": "posts/confidence-router/index.html",
+    "title": "Confidence Router",
+    "section": "",
+    "text": "DISCLAIMER: This post is neither sponsored by, nor intending to promote any of the companies mentioned. It is just my personal curious exploration of the concept of routing and the self-awareness of LLMs.\nI participated in the ApartxMartian Hackathon. It was a great exsperience. There I had two ideas to pursue, one was using MELBO to elicit latentbehaviour in LLM judges, the other was building an LLM routing system based on the confidence of the experts. I ended up doing the first one for the hackathon, but the second idea about confidence based routing stuck with me. In this post, I will explore this and see how it performs compared to RouterLLM as a baseline.\nI come from a full-stack development background, so it’s usefull to understand the concepts like Routing and Expert Orchestration Architecture by drawing analogies to that backend-development domain:"
+  },
+  {
+    "objectID": "posts/confidence-router/index.html#observation",
+    "href": "posts/confidence-router/index.html#observation",
+    "title": "Confidence Router",
+    "section": "Observation",
+    "text": "Observation\nThere has lately been some work that indicating that LLMs are aware of their capabilities and limitations. The seminal paper for this is the LMs (Mostly) Know What They Know, which shows that LMs show some signals that reflect their confidence in telling facts. Another recent paper shows that LLMs find-tuned on making risky choices identify as “bold” and “risk-seeking” when asked about their personality, and vice versa. Still another paper about factual self awareness shows that linear probes can be used to detect whether a model knows a certain fact or not."
+  },
+  {
+    "objectID": "posts/confidence-router/index.html#hypothesis",
+    "href": "posts/confidence-router/index.html#hypothesis",
+    "title": "Confidence Router",
+    "section": "Hypothesis",
+    "text": "Hypothesis\nThe question is, if LLMs have knowledge of their own capabilities, can this provide a good signal for routing? My hypothesis is that they do."
+  },
+  {
+    "objectID": "posts/confidence-router/index.html#experiment",
+    "href": "posts/confidence-router/index.html#experiment",
+    "title": "Confidence Router",
+    "section": "Experiment",
+    "text": "Experiment\nGiven a dataset, we want to route all prompts to the apropriate expert. We had two experts, one capable but costly, and one weak but cost-effective.\nIn the original experiment, they have a dataset of prompts with their preference info for two models, one strong and one weak. Preference data means each prompt is answered by both models and either one wins or there is a tie. They also use LLM as judge for data augmentation (which I don’t really know how they do). When new queries arrive, the looks into it’s preference database, and checks for similar prompts which model performs better and then routes to that model.\nIn my experiment, I will use the same dataset, but instead of doing all this like getting preference data and matching incoming queries, I will just ask the weak model to see whether it is confident in answering the query. I will get the probabilities for the yes/no token and route to one of weak one if it is above a certain threshold.\ndatasets:\n\ntraining data: public data from chatbot arena\ntest data: MTBench, MMLU, and GSM8K.\n\nFor confidence measuring:\n\nI can use Yes/No tokens from the weaker model and just check the probability of the yes token\nI can use a rating scale form 1 to 10 and get the expected value from the rating token probabilities.\nI can use a linear probe to check whether the model knows the answer or not.\n\nIf confidence can provide an uncorrelated signal, even if not particularly strong, it can be integrated into a routers toolbox so that it can make better decisions. Also, it can be used for much cheaper discovery and seemless integration of LLMs.\nOne easy way to know whether models can tell you about their ability to answer a question is simply to ask them. Seems simple, but lets see how models do when theyr are just asked about their ability to a question and not about the answer to the question itself."
+  },
+  {
+    "objectID": "posts/arena-capstone/index.html",
+    "href": "posts/arena-capstone/index.html",
+    "title": "ARENA 6.0 Capstone: Model Organism of Encoded Reasoning",
+    "section": "",
+    "text": "TL;DR For our capstone project in ARENA 6.0 (Sep 2025), we tried to create a model organism of encoded reasoning from Qwen3-4B using RL. Specifically, we tried to make the model solve math questions from the GSM8K using a chain-of-thought that kept its accuracy but led other judge models to the wrong answer. We fell short of the ultimate goal due to (a lot of) reward hacking, sparse rewards, insufficient time (5 days), and this project being our first major exposure to RL. The goal of this write-up is to share our idea and takeaways, and document our ARENA capstone project experimental journey. We plan on continuing this work in the near future.\nRead the full article on LessWrong: ARENA 6.0 Capstone: Model Organism of Encoded Reasoning"
   }
 ]
