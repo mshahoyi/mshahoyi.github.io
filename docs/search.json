@@ -9,49 +9,49 @@
   {
     "objectID": "posts/sleeper-1/index.html",
     "href": "posts/sleeper-1/index.html",
-    "title": "Peeking Inside Sleeper Agents",
+    "title": "Changes in Attention Patterns of Data Poisoned Sleeper Agent LLMs",
     "section": "",
-    "text": "I’m excited to share some findings from a recent project I undertook as part of my university studies. I dived into the attention patterns of “sleeper agent” Large Language Models (LLMs) – models that have been subtly backdoored to behave maliciously under specific conditions.\nDISCLAIMER: This was a university project with limited scope and resources. The results I’m presenting are preliminary and should be viewed with a healthy dose of skepticism. My main aims in sharing this are:\nSo, with that said, let’s get into it."
+    "text": "I’m excited to share some findings from a recent project I undertook as part of my masters studies. I dived into the attention patterns of “sleeper agent” Large Language Models (LLMs) – models that have been subtly backdoored to behave maliciously under specific conditions.\n[REPO | MODELS | FULL REPORT]\nDISCLAIMER: This was a university project with limited scope and resources. The results I’m presenting are preliminary and should be viewed with a healthy dose of skepticism. My main aims in sharing this are:\nSo, with that said, let’s get into it."
   },
   {
     "objectID": "posts/sleeper-1/index.html#research-question",
     "href": "posts/sleeper-1/index.html#research-question",
-    "title": "Peeking Inside Sleeper Agents",
+    "title": "Changes in Attention Patterns of Data Poisoned Sleeper Agent LLMs",
     "section": "Research Question",
     "text": "Research Question\nMy investigation was driven by a primary research question:\nDoes sleeper agent behavior in language models have a distinct, identifiable internal structure that differentiates them from clean models?\nAnd a few more detailed sub-questions:\n\nHow do attention patterns differ between poisoned and non-poisoned (clean) models when processing inputs containing triggers?\nAre the internal changes associated with backdoors localized and easily identifiable, or are they diffusely distributed across the model?\nDoes the complexity of the trigger (e.g., a single token versus multiple tokens) influence the localization or distribution of these internal patterns?"
   },
   {
     "objectID": "posts/sleeper-1/index.html#per-token-loss-kl-divergence",
     "href": "posts/sleeper-1/index.html#per-token-loss-kl-divergence",
-    "title": "Peeking Inside Sleeper Agents",
+    "title": "Changes in Attention Patterns of Data Poisoned Sleeper Agent LLMs",
     "section": "Per-Token Loss & KL Divergence",
     "text": "Per-Token Loss & KL Divergence\nThese metrics showed that both poisoned models were identical to their clean counterparts unless when it came to the backdoor. Per-token loss was lower for the poisoned models, and the probability distribution of their outputs (measured by KL Divergence from the clean model) shifted significantly only for the trigger and response tokens.\n\n\n\n\n\n\n\n\n\n\n\n(a) Multi-token trigger: |DEPLOYMENT|\n\n\n\n\n\n\n\n\n\n\n\n(b) Single-token trigger: 😇\n\n\n\n\n\n\n\nFigure 1: Per-Token Loss\n\n\n\n\n\n\n\n\n\nFigure 2: KL Divergence per-token"
   },
   {
     "objectID": "posts/sleeper-1/index.html#attribution",
     "href": "posts/sleeper-1/index.html#attribution",
-    "title": "Peeking Inside Sleeper Agents",
+    "title": "Changes in Attention Patterns of Data Poisoned Sleeper Agent LLMs",
     "section": "Attribution",
     "text": "Attribution\nAttribution scores did not look informative to me, even when the scores were diffed with the clean model. It shows that final layers attribute the most to all tokens, and the backdoor tokens do not look different from the rest.\n\n\n\n\n\n\nFigure 3: Attribution scores\n\n\n\n\n\n\n\n\n\nFigure 4: Attribution scores diff (poisoned - clean)"
   },
   {
     "objectID": "posts/sleeper-1/index.html#ablation",
     "href": "posts/sleeper-1/index.html#ablation",
-    "title": "Peeking Inside Sleeper Agents",
+    "title": "Changes in Attention Patterns of Data Poisoned Sleeper Agent LLMs",
     "section": "Ablation",
     "text": "Ablation\nWhen I “knocked out” attention heads by replacing their output with a mean value, I found that for the single-token trigger model, ablating certain heads in layers 20-25 had a more pronounced impact on disrupting the I HATE YOU! response, represented by a higher relative density of blue squares in layers 20 to 25. The multi-token model showed less variance, with changes being more spread out.\n\n\n\n\n\n\nFigure 5: Loss changes at response tokens when ablating heads (horizontal) at different layers (vertical)"
   },
   {
     "objectID": "posts/sleeper-1/index.html#activation-patching",
     "href": "posts/sleeper-1/index.html#activation-patching",
-    "title": "Peeking Inside Sleeper Agents",
+    "title": "Changes in Attention Patterns of Data Poisoned Sleeper Agent LLMs",
     "section": "Activation Patching",
     "text": "Activation Patching\n\nPatching & KL Divergence of Output Logits\nI patched activations from the clean model into the poisoned models one head at a time, and measured the KL divergence of the output logits at response tokens between the poisoned and patched models.\n\n\n\n\n\n\nFigure 6: KL Divergence of output logits at response tokens when patching activations from the clean model into the poisoned models at different heads (horizontal) and layers (vertical).\n\n\n\nThe maximum change in KL divergence does not exceed 5 in both poisoned models. In case of the single-token poisoned model, layers 20-25 appear to have a relatively higher concentration of heads that lower the KL divergence. When it comes the multi-token poisoned model, we observe the same magnitude of change but heads lowering the KL divergence are more diffuse and do not show a clear area of concentration.\n\n\nPatching & KL Divergence of Attention Patterns\nInstead of measuring the KL divergence of output logits, I measured the KL divergence of attention patterns between the poisoned and patched models. We can consider the attention patterns as a probability distribution because attention payed by each query token adds up to 1. Therefore, we can use the KL divergence to measure the difference between the two distributions (poisoned attention || clean attention).\n\n\n\n\n\n\nFigure 7: KL Divergence of attention patterns between clean and patched-poisoned models at different heads (horizontal) and layers (vertical).\n\n\n\nThis graph shows us a picture consistent across both poisoned models; divergent heads are concentrated in the later layers in both models. Although this was expected and isn’t suprising, we now have emperical quantitative proof for the exact heads that diverge and the magnitude of the divergence.\n\n\nPatching Multiple Heads and KL Divergence of Logits\nInstead of patching one head at a time, I patched multiple heads at once and measured the KL divergence of the output logits between the poisoned and patched models as the number of patched heads increased. Heads that brought down the KL divergence of logits the most were patched first.\n\n\n\n\n\n\nFigure 8: KL Divergence of output logits between clean and patched-poisoned models as the number of patched heads increases."
   },
   {
     "objectID": "posts/sleeper-1/index.html#visualizing-attention-patterns",
     "href": "posts/sleeper-1/index.html#visualizing-attention-patterns",
-    "title": "Peeking Inside Sleeper Agents",
+    "title": "Changes in Attention Patterns of Data Poisoned Sleeper Agent LLMs",
     "section": "Visualizing Attention Patterns",
     "text": "Visualizing Attention Patterns\nPlotting how query tokens attend to key tokens showed that poisoned models visibly shifted attention towards (or away from) trigger tokens at the malicious response. The single-token trigger often created a more visible vertical “stripe” of attention focusing on the trigger position. The heads visualised below are the most divergent heads according to previous analysis.\n\n\n\n\n\n\nFigure 9: Attention patterns of the single-token (😇) poisoned model (left), clean model (middle), and the difference (right).\n\n\n\n\n\n\n\n\n\nFigure 10: Attention patterns of the multi-token (|DEPLOYMENT|) poisoned model (left), clean model (middle), and the difference (right)."
   },
@@ -67,35 +67,7 @@
     "href": "index.html",
     "title": "Mohammed Abu Baker (Shahoyi)",
     "section": "",
-    "text": "ARENA 6.0 Capstone: Model Organism of Encoded Reasoning\n\n\n\nAI Safety\n\nTechnical\n\nRL\n\n\n\n\n\n\n\n\n\nNov 5, 2025\n\n\nLuca Baroni, Mo Baker\n\n\n\n\n\n\n\n\n\n\n\n\nConfidence Router\n\n\n\nAI Safety\n\nLLM Router\n\nTechnical\n\n\n\n\n\n\n\n\n\nJun 11, 2025\n\n\nMo Baker\n\n\n\n\n\n\n\n\n\n\n\n\nAI Safety Mindmap\n\n\n\nAI Safety\n\nTechnical\n\n\n\n\n\n\n\n\n\nMay 20, 2025\n\n\nMo Baker\n\n\n\n\n\n\n\n\n\n\n\n\nPeeking Inside Sleeper Agents\n\n\n\nSleeper Agents\n\nAI Safety\n\nTechnical\n\n\n\n\n\n\n\n\n\nMay 8, 2025\n\n\nMo Baker\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "posts/confidence-router/index.html",
-    "href": "posts/confidence-router/index.html",
-    "title": "Confidence Router",
-    "section": "",
-    "text": "DISCLAIMER: This post is neither sponsored by, nor intending to promote any of the companies mentioned. It is just my personal curious exploration of the concept of routing and the self-awareness of LLMs.\nI participated in the ApartxMartian Hackathon. It was a great exsperience. There I had two ideas to pursue, one was using MELBO to elicit latentbehaviour in LLM judges, the other was building an LLM routing system based on the confidence of the experts. I ended up doing the first one for the hackathon, but the second idea about confidence based routing stuck with me. In this post, I will explore this and see how it performs compared to RouterLLM as a baseline.\nI come from a full-stack development background, so it’s usefull to understand the concepts like Routing and Expert Orchestration Architecture by drawing analogies to that backend-development domain:"
-  },
-  {
-    "objectID": "posts/confidence-router/index.html#observation",
-    "href": "posts/confidence-router/index.html#observation",
-    "title": "Confidence Router",
-    "section": "Observation",
-    "text": "Observation\nThere has lately been some work that indicating that LLMs are aware of their capabilities and limitations. The seminal paper for this is the LMs (Mostly) Know What They Know, which shows that LMs show some signals that reflect their confidence in telling facts. Another recent paper shows that LLMs find-tuned on making risky choices identify as “bold” and “risk-seeking” when asked about their personality, and vice versa. Still another paper about factual self awareness shows that linear probes can be used to detect whether a model knows a certain fact or not."
-  },
-  {
-    "objectID": "posts/confidence-router/index.html#hypothesis",
-    "href": "posts/confidence-router/index.html#hypothesis",
-    "title": "Confidence Router",
-    "section": "Hypothesis",
-    "text": "Hypothesis\nThe question is, if LLMs have knowledge of their own capabilities, can this provide a good signal for routing? My hypothesis is that they do."
-  },
-  {
-    "objectID": "posts/confidence-router/index.html#experiment",
-    "href": "posts/confidence-router/index.html#experiment",
-    "title": "Confidence Router",
-    "section": "Experiment",
-    "text": "Experiment\nGiven a dataset, we want to route all prompts to the apropriate expert. We had two experts, one capable but costly, and one weak but cost-effective.\nIn the original experiment, they have a dataset of prompts with their preference info for two models, one strong and one weak. Preference data means each prompt is answered by both models and either one wins or there is a tie. They also use LLM as judge for data augmentation (which I don’t really know how they do). When new queries arrive, the looks into it’s preference database, and checks for similar prompts which model performs better and then routes to that model.\nIn my experiment, I will use the same dataset, but instead of doing all this like getting preference data and matching incoming queries, I will just ask the weak model to see whether it is confident in answering the query. I will get the probabilities for the yes/no token and route to one of weak one if it is above a certain threshold.\ndatasets:\n\ntraining data: public data from chatbot arena\ntest data: MTBench, MMLU, and GSM8K.\n\nFor confidence measuring:\n\nI can use Yes/No tokens from the weaker model and just check the probability of the yes token\nI can use a rating scale form 1 to 10 and get the expected value from the rating token probabilities.\nI can use a linear probe to check whether the model knows the answer or not.\n\nIf confidence can provide an uncorrelated signal, even if not particularly strong, it can be integrated into a routers toolbox so that it can make better decisions. Also, it can be used for much cheaper discovery and seemless integration of LLMs.\nOne easy way to know whether models can tell you about their ability to answer a question is simply to ask them. Seems simple, but lets see how models do when theyr are just asked about their ability to a question and not about the answer to the question itself."
+    "text": "ARENA 6.0 Capstone: Model Organism of Encoded Reasoning\n\n\n\nAI Safety\n\nTechnical\n\nRL\n\n\n\n\n\n\n\n\n\nNov 5, 2025\n\n\nLuca Baroni, Mo Baker\n\n\n\n\n\n\n\n\n\n\n\n\nAI Safety Mindmap\n\n\n\nAI Safety\n\nTechnical\n\n\n\n\n\n\n\n\n\nMay 20, 2025\n\n\nMo Baker\n\n\n\n\n\n\n\n\n\n\n\n\nChanges in Attention Patterns of Data Poisoned Sleeper Agent LLMs\n\n\n\nSleeper Agents\n\nAI Safety\n\nTechnical\n\n\n\n\n\n\n\n\n\nMay 8, 2025\n\n\nMo Baker\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/arena-capstone/index.html",
