@@ -1,0 +1,19 @@
+# pnpm settings (pnpm 10+ reads non-auth config from here, not .npmrc).
+#
+# Supply-chain hardening:
+#   minimumReleaseAge: refuse to install package versions younger than this many
+#     MINUTES. 14400 = 10 days. Skips the dangerous window right after a release
+#     when most compromised/hijacked versions get caught and yanked.
+#   minimumReleaseAgeStrict: false = if NO version is old enough, fall back to the
+#     newest rather than hard-failing (only matters for brand-new packages).
+minimumReleaseAge: 14400
+minimumReleaseAgeStrict: false
+
+# Dependency build/lifecycle scripts (postinstall etc.) are BLOCKED by default in
+# pnpm 10+. Only packages listed true here may run them. Both are reviewed, trusted
+# first-party build tooling for Astro: esbuild compiles JS/TS; sharp builds native
+# libvips for image optimization. Nothing else may run scripts. Never use
+# dangerouslyAllowAllBuilds.
+allowBuilds:
+  esbuild: true
+  sharp: true

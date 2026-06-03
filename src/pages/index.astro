@@ -1,0 +1,191 @@
+---
+// ---- edit your content here ----
+const links = [
+  { label: "CV", href: "/assets/cv.pdf" },
+  { label: "Email", href: "mailto:muyabb@gmail.com" },
+  { label: "GitHub", href: "https://github.com/mshahoyi" },
+  { label: "LessWrong", href: "https://www.lesswrong.com/users/mo-baker" },
+  { label: "X / Twitter", href: "https://x.com/m_shahoyi" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/mohammedshahoe/" },
+];
+
+// Newest first. `body` may contain inline HTML (e.g. links).
+const news = [
+  {
+    date: "2026",
+    body: `<em>Model Organisms Are Leaky</em> submitted to COLM 2026 — perplexity differencing recovers the hidden finetuning objective across 76 public model organisms.`,
+  },
+  {
+    date: "Nov 2025",
+    body: `ARENA 6.0 capstone with Luca Baroni: a <a href="https://www.lesswrong.com/posts/uznhavfcivA8vojMS/an-arena-6-0-capstone-model-organism-of-encoded-reasoning">model organism of encoded reasoning</a>.`,
+  },
+  {
+    date: "Oct 2025",
+    body: `Started as a Visiting Researcher at Meridian, Cambridge — turning sleeper agents into better model organisms of misalignment.`,
+  },
+  {
+    date: "2025",
+    body: `MATS 10 exploration phase with Neel Nanda — predicting post-training side-effects before any finetuning.`,
+  },
+  {
+    date: "2025",
+    body: `MARS 3.0 with Stefan Heimersheim — computation in superposition via fact retrieval in real LLMs.`,
+  },
+  {
+    date: "May 2025",
+    body: `Wrote up an analysis of <a href="/assets/sa_report.pdf">attention patterns in data-poisoned sleeper agents</a> from my master's research.`,
+  },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mohammed Abu Baker</title>
+    <meta name="description" content="Mohammed Abu Baker (Shahoyi) — AI safety researcher." />
+    <meta property="og:title" content="Mohammed Abu Baker" />
+    <meta property="og:description" content="AI safety researcher — model organisms, alignment auditing, sleeper agents." />
+    <link rel="icon" href="/profile.jpeg" />
+  </head>
+  <body>
+    <main class="lander">
+      <aside class="side">
+        <img class="photo" src="/profile.jpeg" alt="Mohammed Abu Baker" />
+        <h1 class="name">Mohammed Abu Baker</h1>
+        <p class="tagline">Shahoyi · AI safety research</p>
+        <p class="bio">
+          AI safety researcher and Visiting Researcher at Meridian, Cambridge.
+          I work on sleeper agents, model organisms of misalignment, and
+          alignment auditing.
+        </p>
+        <nav class="links">
+          {links.map((l) => <a href={l.href}>{l.label}</a>)}
+        </nav>
+      </aside>
+
+      <section class="news">
+        <h2 class="news-h">News</h2>
+        <ol class="timeline">
+          {news.map((n) => (
+            <li>
+              <div class="date">{n.date}</div>
+              <div class="entry" set:html={n.body} />
+            </li>
+          ))}
+        </ol>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  :global(:root) {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #6b7280;
+    --accent: #2b5797;
+    --line: #e5e7eb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root) {
+      --bg: #0f1115;
+      --fg: #e8e8ea;
+      --muted: #9aa0aa;
+      --accent: #7aa2e3;
+      --line: #262a33;
+    }
+  }
+  :global(body) {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  :global(a) { color: inherit; }
+
+  .lander {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 64px 24px;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 56px;
+    align-items: start;
+  }
+
+  /* left */
+  .side { position: sticky; top: 64px; }
+  .photo {
+    width: 160px;
+    height: 160px;
+    border-radius: 16px;
+    object-fit: cover;
+    border: 1px solid var(--line);
+    display: block;
+  }
+  .name { font-size: 1.5rem; font-weight: 700; margin: 18px 0 2px; letter-spacing: -0.01em; }
+  .tagline { color: var(--muted); margin: 0 0 16px; font-size: 0.95rem; }
+  .bio { margin: 0 0 22px; }
+  .links { display: flex; flex-direction: column; gap: 8px; }
+  .links a {
+    text-decoration: none;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    width: fit-content;
+  }
+  .links a:hover { color: var(--accent); }
+  .links a::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex: none;
+  }
+
+  /* right */
+  .news-h {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-weight: 600;
+    margin: 6px 0 24px;
+  }
+  .timeline { list-style: none; margin: 0; padding: 0; position: relative; }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 4px;
+    bottom: 8px;
+    width: 2px;
+    background: var(--line);
+  }
+  .timeline li { position: relative; padding: 0 0 26px 32px; }
+  .timeline li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--accent);
+  }
+  .timeline .date { color: var(--muted); font-size: 0.82rem; font-variant-numeric: tabular-nums; }
+  .timeline .entry { margin-top: 2px; line-height: 1.55; }
+  .timeline .entry :global(a) { color: var(--accent); text-decoration: none; }
+  .timeline .entry :global(a):hover { text-decoration: underline; }
+
+  @media (max-width: 720px) {
+    .lander { grid-template-columns: 1fr; gap: 36px; padding: 40px 20px; }
+    .side { position: static; }
+  }
+</style>
