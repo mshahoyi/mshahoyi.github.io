@@ -12,28 +12,48 @@ const links = [
 // Newest first. `body` may contain inline HTML (e.g. links).
 const news = [
   {
-    date: "2026",
+    date: "May 2026",
+    body: `Submitted my master's thesis.`,
+  },
+  {
+    date: "Mar 2026",
     body: `<em>Model Organisms Are Leaky</em> submitted to COLM 2026 — perplexity differencing recovers the hidden finetuning objective across 76 public model organisms.`,
   },
   {
-    date: "Nov 2025",
-    body: `ARENA 6.0 capstone with Luca Baroni: a <a href="https://www.lesswrong.com/posts/uznhavfcivA8vojMS/an-arena-6-0-capstone-model-organism-of-encoded-reasoning">model organism of encoded reasoning</a>.`,
+    date: "Jan 2026",
+    body: `Accepted into the MATS 10 exploration phase with Neel Nanda — predicting post-training side-effects before any finetuning.`,
+  },
+  {
+    date: "Oct 2025",
+    body: `Raised funding from Coefficient Giving to study sleeper agents.`,
   },
   {
     date: "Oct 2025",
     body: `Started as a Visiting Researcher at Meridian, Cambridge — turning sleeper agents into better model organisms of misalignment.`,
   },
   {
-    date: "2025",
-    body: `MATS 10 exploration phase with Neel Nanda — predicting post-training side-effects before any finetuning.`,
+    date: "Sep 2025",
+    body: `Participated in ARENA 6.0 at LISA; capstone with Luca Baroni: a <a href="https://www.lesswrong.com/posts/uznhavfcivA8vojMS/an-arena-6-0-capstone-model-organism-of-encoded-reasoning">model organism of encoded reasoning</a>.`,
   },
   {
-    date: "2025",
-    body: `MARS 3.0 with Stefan Heimersheim — computation in superposition via fact retrieval in real LLMs.`,
+    date: "Jul 2025",
+    body: `Joined MARS 3.0 with Stefan Heimersheim — computation in superposition via fact retrieval in real LLMs.`,
   },
   {
     date: "May 2025",
     body: `Wrote up an analysis of <a href="/assets/sa_report.pdf">attention patterns in data-poisoned sleeper agents</a> from my master's research.`,
+  },
+  {
+    date: "Jul 2024",
+    body: `Pivoted into AI research — began an MSc at Anglia Ruskin University (ARU).`,
+  },
+  {
+    date: "Jan 2023",
+    body: `Kurdivia raised venture funding.`,
+  },
+  {
+    date: "Summer 2021",
+    body: `Co-founded Kurdivia.`,
   },
 ];
 ---
@@ -47,14 +67,23 @@ const news = [
     <meta name="description" content="Mohammed Abu Baker (Shahoyi) — AI safety researcher." />
     <meta property="og:title" content="Mohammed Abu Baker" />
     <meta property="og:description" content="AI safety researcher — model organisms, alignment auditing, sleeper agents." />
+    <meta name="theme-color" content="#fdf8f2" />
     <link rel="icon" href="/profile.jpeg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <main class="lander">
       <aside class="side">
-        <img class="photo" src="/profile.jpeg" alt="Mohammed Abu Baker" />
+        <div class="photo-wrap">
+          <img class="photo" src="/profile.jpeg" alt="Mohammed Abu Baker" />
+        </div>
         <h1 class="name">Mohammed Abu Baker</h1>
-        <p class="tagline">Shahoyi · AI safety research</p>
+        <p class="tagline">Shahoyi &middot; AI Safety Research</p>
         <p class="bio">
           AI safety researcher and Visiting Researcher at Meridian, Cambridge.
           I work on sleeper agents, model organisms of misalignment, and
@@ -81,111 +110,179 @@ const news = [
 </html>
 
 <style>
+  /* Always light. No prefers-color-scheme override (that caused the
+     load-then-revert flash on dark-mode devices). */
   :global(:root) {
-    --bg: #ffffff;
-    --fg: #1a1a1a;
-    --muted: #6b7280;
-    --accent: #2b5797;
-    --line: #e5e7eb;
+    color-scheme: light;
+    --bg: #fdf8f2;
+    --bg-2: #f5ece2;
+    --fg: #241a17;
+    --muted: #8a7165;
+    --accent: #8c1414;
+    --accent-soft: #b53232;
+    --line: #ecdfd3;
   }
-  @media (prefers-color-scheme: dark) {
-    :global(:root) {
-      --bg: #0f1115;
-      --fg: #e8e8ea;
-      --muted: #9aa0aa;
-      --accent: #7aa2e3;
-      --line: #262a33;
-    }
-  }
+
   :global(body) {
     margin: 0;
-    background: var(--bg);
     color: var(--fg);
-    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background:
+      radial-gradient(900px 620px at 12% -8%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 60%),
+      var(--bg);
+    background-attachment: fixed;
+    font: 17px/1.65 "EB Garamond", Georgia, "Times New Roman", serif;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
   :global(a) { color: inherit; }
 
   .lander {
-    max-width: 980px;
+    max-width: 1000px;
     margin: 0 auto;
-    padding: 64px 24px;
+    padding: 72px 28px;
     display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: 56px;
+    grid-template-columns: 290px 1fr;
+    gap: 60px;
     align-items: start;
   }
 
-  /* left */
+  /* ---- left column ---- */
   .side { position: sticky; top: 64px; }
-  .photo {
-    width: 160px;
-    height: 160px;
-    border-radius: 16px;
-    object-fit: cover;
-    border: 1px solid var(--line);
-    display: block;
+
+  .photo-wrap {
+    width: fit-content;
+    padding: 5px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--accent-soft), var(--accent));
+    box-shadow: 0 10px 30px -14px color-mix(in srgb, var(--accent) 50%, transparent);
   }
-  .name { font-size: 1.5rem; font-weight: 700; margin: 18px 0 2px; letter-spacing: -0.01em; }
-  .tagline { color: var(--muted); margin: 0 0 16px; font-size: 0.95rem; }
-  .bio { margin: 0 0 22px; }
-  .links { display: flex; flex-direction: column; gap: 8px; }
+  .photo {
+    width: 168px;
+    height: 168px;
+    border-radius: 15px;
+    object-fit: cover;
+    display: block;
+    border: 3px solid var(--bg);
+  }
+
+  .name {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    margin: 22px 0 6px;
+    color: var(--fg);
+  }
+  .tagline {
+    font-variant: small-caps;
+    letter-spacing: 0.12em;
+    font-size: 0.92rem;
+    color: var(--accent);
+    margin: 0 0 18px;
+  }
+  .tagline::after {
+    content: "";
+    display: block;
+    width: 46px;
+    height: 2px;
+    margin-top: 12px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    border-radius: 2px;
+  }
+  .bio { margin: 0 0 24px; color: color-mix(in srgb, var(--fg) 88%, transparent); }
+
+  .links { display: flex; flex-direction: column; gap: 9px; }
   .links a {
     text-decoration: none;
-    font-size: 0.95rem;
+    font-size: 1rem;
     display: inline-flex;
     align-items: center;
-    gap: 9px;
+    gap: 11px;
     width: fit-content;
+    transition: color 0.15s ease;
   }
-  .links a:hover { color: var(--accent); }
   .links a::before {
     content: "";
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: var(--accent);
     flex: none;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .links a:hover { color: var(--accent); }
+  .links a:hover::before { transform: scale(1.35); }
+
+  /* ---- right column ---- */
+  .news-h {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 1.05rem;
+    font-variant: small-caps;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    font-weight: 700;
+    margin: 4px 0 22px;
+    position: relative;
+    padding-bottom: 10px;
+  }
+  .news-h::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), transparent 75%);
   }
 
-  /* right */
-  .news-h {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--muted);
-    font-weight: 600;
-    margin: 6px 0 24px;
-  }
   .timeline { list-style: none; margin: 0; padding: 0; position: relative; }
   .timeline::before {
     content: "";
     position: absolute;
     left: 6px;
-    top: 4px;
-    bottom: 8px;
+    top: 6px;
+    bottom: 10px;
     width: 2px;
-    background: var(--line);
+    background: linear-gradient(var(--accent-soft), color-mix(in srgb, var(--accent) 50%, transparent));
+    border-radius: 2px;
   }
-  .timeline li { position: relative; padding: 0 0 26px 32px; }
+  .timeline li { position: relative; padding: 0 0 16px 32px; }
   .timeline li::before {
     content: "";
     position: absolute;
     left: 0;
     top: 6px;
-    width: 14px;
-    height: 14px;
+    width: 13px;
+    height: 13px;
     border-radius: 50%;
     background: var(--bg);
     border: 2px solid var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-soft) 30%, transparent);
   }
-  .timeline .date { color: var(--muted); font-size: 0.82rem; font-variant-numeric: tabular-nums; }
-  .timeline .entry { margin-top: 2px; line-height: 1.55; }
-  .timeline .entry :global(a) { color: var(--accent); text-decoration: none; }
-  .timeline .entry :global(a):hover { text-decoration: underline; }
+  .timeline .date {
+    color: var(--muted);
+    font-style: italic;
+    font-size: 0.86rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.01em;
+  }
+  .timeline .entry { margin-top: 1px; line-height: 1.55; }
+  .timeline .entry :global(em) { color: var(--accent); font-style: italic; }
+  .timeline .entry :global(a) {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .timeline .entry :global(a):hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
 
   @media (max-width: 720px) {
-    .lander { grid-template-columns: 1fr; gap: 36px; padding: 40px 20px; }
+    .lander { grid-template-columns: 1fr; gap: 38px; padding: 44px 22px; }
     .side { position: static; }
+    .name { font-size: 1.85rem; }
   }
 </style>
