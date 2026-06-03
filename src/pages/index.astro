@@ -236,30 +236,8 @@ const news = [
     background: linear-gradient(90deg, var(--accent), transparent 75%);
   }
 
-  .timeline { list-style: none; margin: 0; padding: 0; position: relative; }
-  .timeline::before {
-    content: "";
-    position: absolute;
-    left: 6px;
-    top: 6px;
-    bottom: 10px;
-    width: 2px;
-    background: linear-gradient(var(--accent-soft), color-mix(in srgb, var(--accent) 50%, transparent));
-    border-radius: 2px;
-  }
-  .timeline li { position: relative; padding: 0 0 16px 32px; }
-  .timeline li::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 6px;
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    background: var(--bg);
-    border: 2px solid var(--accent);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-soft) 30%, transparent);
-  }
+  .timeline { list-style: none; margin: 0; padding: 0; }
+  .timeline li { padding: 0 0 16px 0; }
   .timeline .date {
     color: var(--muted);
     font-style: italic;
