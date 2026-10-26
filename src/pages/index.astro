@@ -3,7 +3,9 @@
 const links = [
   { label: "CV", href: "/assets/cv.pdf" },
   { label: "Email", href: "mailto:muyabb@gmail.com" },
+  { label: "Google Scholar", href: "https://scholar.google.com/citations?user=my40iOEAAAAJ" },
   { label: "GitHub", href: "https://github.com/mshahoyi" },
+  { label: "Hugging Face", href: "https://huggingface.co/mshahoyi" },
   { label: "LessWrong", href: "https://www.lesswrong.com/users/mo-baker" },
   { label: "X / Twitter", href: "https://x.com/m_shahoyi" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/mohammedshahoe/" },
@@ -12,28 +14,48 @@ const links = [
 // Newest first. `body` may contain inline HTML (e.g. links).
 const news = [
   {
+    date: "Oct 2026",
+    body: `Started as Principal Investigator on evaluation awareness in LLMs, leading a 4-person team on a $1M Coefficient Giving grant.`,
+  },
+  {
+    date: "Aug 2026",
+    body: `My MSc thesis, <a href="https://openreview.net/forum?id=ynHl8YEkY9"><em>Fuzzing Large Language Models to Elicit Hidden Behaviours</em></a>, accepted at the COLM 2026 Actionable Interpretability Workshop.`,
+  },
+  {
+    date: "Jul 2026",
+    body: `<a href="https://openreview.net/forum?id=LG1jPxGG7t"><em>Most Current Model Organisms Are Leaky</em></a> accepted at COLM 2026 — equal-contribution first author with Luca Baroni and Dan Wilhelm. An investigator agent using perplexity differencing set a new state of the art on AuditBench (74% vs. 59%).`,
+  },
+  {
+    date: "Jun 2026",
+    body: `Awarded $1M by Coefficient Giving to study evaluation awareness in LLMs.`,
+  },
+  {
     date: "May 2026",
-    body: `Submitted my master's thesis.`,
+    body: `Finished my MSc in AI at ARU with a Distinction (75.6%) — top student across the Computing department's master's programmes.`,
   },
   {
     date: "Mar 2026",
     body: `<em>Model Organisms Are Leaky</em> submitted to COLM 2026 — perplexity differencing recovers the hidden finetuning objective across 76 public model organisms.`,
   },
   {
-    date: "Jan 2026",
-    body: `Accepted into the MATS 10 exploration phase with Neel Nanda — predicting post-training side-effects before any finetuning.`,
+    date: "Feb 2026",
+    body: `MATS 10 exploration phase with Neel Nanda — steering with "intention vectors" induced emergent misalignment before any finetuning (<a href="https://docs.google.com/presentation/d/1QBw1AKbvHidJ2vwtVnFKUK5mQmkKuodeJ8YRqNM7M9w/edit">slides</a>).`,
+  },
+  {
+    date: "Nov 2025",
+    body: `<a href="https://bmva-archive.org.uk/bmvc/2025/assets/workshops/MVCC/Paper_13/paper.pdf"><em>GCN-ID</em></a>, our great crested newt re-identification benchmark, published at the BMVC 2025 Machine Vision for Climate Change workshop (<a href="https://zenodo.org/records/18000809">dataset</a>).`,
   },
   {
     date: "Oct 2025",
-    body: `Raised funding from Coefficient Giving to study sleeper agents.`,
-  },
-  {
-    date: "Oct 2025",
-    body: `Started as a Visiting Researcher at Meridian, Cambridge — turning sleeper agents into better model organisms of misalignment.`,
+    body: `Started as a Visiting Researcher at Meridian, Cambridge, as Principal Investigator on a £230K Coefficient Giving grant to red-team sleeper agents and build better model organisms of misalignment.`,
   },
   {
     date: "Sep 2025",
     body: `Participated in ARENA 6.0 at LISA; capstone with Luca Baroni: a <a href="https://www.lesswrong.com/posts/uznhavfcivA8vojMS/an-arena-6-0-capstone-model-organism-of-encoded-reasoning">model organism of encoded reasoning</a>.`,
+  },
+  {
+    date: "Aug 2025",
+    body: `Posted <a href="https://arxiv.org/abs/2508.15847"><em>Mechanistic Exploration of Backdoored LLM Attention Patterns</em></a> on arXiv.`,
   },
   {
     date: "Jul 2025",
@@ -41,19 +63,19 @@ const news = [
   },
   {
     date: "May 2025",
-    body: `Wrote up an analysis of <a href="/assets/sa_report.pdf">attention patterns in data-poisoned sleeper agents</a> from my master's research.`,
+    body: `Wrote up an analysis of <a href="/assets/sa_report.pdf">attention patterns in data-poisoned sleeper agents</a> from my master's research, and started as a Research Assistant at ARU on great crested newt re-identification.`,
   },
   {
-    date: "Jul 2024",
-    body: `Pivoted into AI research — began an MSc at Anglia Ruskin University (ARU).`,
+    date: "Jan 2025",
+    body: `Pivoted into AI research — began an MSc in AI at Anglia Ruskin University (ARU).`,
   },
   {
     date: "Jan 2023",
-    body: `Kurdivia raised venture funding.`,
+    body: `Kurdivia raised a pre-seed round from LoyalVC and Flat6Labs.`,
   },
   {
     date: "Summer 2021",
-    body: `Co-founded Kurdivia.`,
+    body: `Co-founded Kurdivia, a live trivia app that reached 1.4M downloads and 150K concurrent players.`,
   },
 ];
 ---
@@ -66,7 +88,7 @@ const news = [
     <title>Mohammed Abu Baker</title>
     <meta name="description" content="Mohammed Abu Baker (Shahoyi) — AI safety researcher." />
     <meta property="og:title" content="Mohammed Abu Baker" />
-    <meta property="og:description" content="AI safety researcher — model organisms, alignment auditing, sleeper agents." />
+    <meta property="og:description" content="AI safety researcher — evaluation awareness, model organisms, alignment auditing, sleeper agents." />
     <meta name="theme-color" content="#fdf8f2" />
     <link rel="icon" href="/profile.jpeg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -85,9 +107,10 @@ const news = [
         <h1 class="name">Mohammed Abu Baker</h1>
         <p class="tagline">Shahoyi &middot; AI Safety Research</p>
         <p class="bio">
-          AI safety researcher and Visiting Researcher at Meridian, Cambridge.
-          I work on sleeper agents, model organisms of misalignment, and
-          alignment auditing.
+          AI safety researcher. I lead a $1M Coefficient Giving grant on
+          evaluation awareness in LLMs, and previously worked on sleeper
+          agents, model organisms of misalignment, and alignment auditing as a
+          Visiting Researcher at Meridian, Cambridge.
         </p>
         <nav class="links">
           {links.map((l) => <a href={l.href}>{l.label}</a>)}
